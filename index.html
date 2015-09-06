@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="fluid.webComponents">
+<head>
+    <meta charset="UTF-8">
+    <title>Fluid Web Components</title>
+    <link href="dist/css/web-components.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body ng-controller="sampleCtrl">
+<fluid-select fluid-cache="sourceUrl" info change="change()" class="col-lg-12"
+              source-url="http://192.168.1.11:8080/rex-services/factories/war/table_factories/years"
+              label="Years" model="value"></fluid-select>
+<script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+<script src="bower_components/angular/angular.js" type="text/javascript"></script>
+<script src="bower_components/angular-filter/dist/angular-filter.min.js" type="text/javascript"></script>
+<script src="dist/js/web-components.js" type="text/javascript"></script>
+</body>
+</html>

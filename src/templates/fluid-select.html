@@ -1,0 +1,15 @@
+<label class="control-label fluid-select">
+    {{label}}
+    <div class="btn-group fluid-select-dropdown">
+        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" ng-click="look()"
+                aria-expanded="false">
+            <span class="label"></span>
+            <span ng-if="!model">...</span>
+            <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu">
+            <li ng-if="isLoading"><a>Loading {{label ? label : 'selection'}} <i class="fa fa-spinner fa-spin"></i></a></li>
+        </ul>
+    </div>
+</label>
