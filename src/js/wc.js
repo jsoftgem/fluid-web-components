@@ -1,7 +1,7 @@
 /**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -34,4 +34,5 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bo
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
+        scope.labelList = [{"label2": "rer", "label": "wer"}, {"label": "3", "label2": "w"}];
     }]);

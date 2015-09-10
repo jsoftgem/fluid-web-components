@@ -1,5 +1,13 @@
+
+
 @mixin border-radius($radius) {
   border-radius: $radius;
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;
 }
+
+.table-header {
+  text-align: center;
+  padding: 5px;
+}
+

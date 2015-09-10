@@ -26,4 +26,27 @@
   overflow-y: auto;
 }
 
-/*# sourceMappingURL=sass.css.map */
+.table-header, .fluid-subtable table th, .fluid-subtable table tr td {
+  text-align: center;
+  padding: 5px;
+}
+
+.fluid-subtable table {
+  width: 100%;
+}
+
+.fluid-subtable table tr {
+  height: 40px;
+}
+
+.fluid-subtable table tr td {
+  cursor: pointer;
+}
+
+.fluid-subtable .panel-heading {
+  height: 50px;
+}
+
+.fluid-subtable .panel-title {
+  margin-top: -9px;
+}

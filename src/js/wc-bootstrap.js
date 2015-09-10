@@ -12,6 +12,9 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("btn-info");
                 } else if (element.hasClass("panel")) {
                     element.addClass("panel-info");
+                } else if (element.hasClass("fluid-subtable")) {
+                    element.find(".panel").addClass("panel-info");
+                    element.find(".modal").addClass("modal-")
                 }
 
             }
@@ -27,6 +30,8 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("btn-warning");
                 } else if (element.hasClass("panel")) {
                     element.addClass("panel-warning");
+                } else if (element.hasClass("fluid-subtable")) {
+                    element.find(".panel").addClass("panel-warning");
                 }
             }
         }
@@ -41,6 +46,8 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("btn-danger");
                 } else if (element.hasClass("panel")) {
                     element.addClass("panel-danger");
+                } else if (element.hasClass("fluid-subtable")) {
+                    element.find(".panel").addClass("panel-danger");
                 }
             }
         }
@@ -55,6 +62,8 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("btn-success");
                 } else if (element.hasClass("panel")) {
                     element.addClass("panel-success");
+                } else if (element.hasClass("fluid-subtable")) {
+                    element.find(".panel").addClass("panel-success");
                 }
             }
         }
@@ -69,6 +78,8 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("btn-primary");
                 } else if (element.hasClass("panel")) {
                     element.addClass("panel-primary");
+                } else if (element.hasClass("fluid-subtable")) {
+                    element.find(".panel").addClass("panel-primary");
                 }
             }
         }

@@ -1,0 +1,38 @@
+@import "../variables";
+@import "../mixin";
+
+.fluid-subtable {
+}
+
+.fluid-subtable .column-form {
+
+}
+
+.fluid-subtable .column-row {
+
+}
+
+.fluid-subtable table {
+  width: $full-width;
+}
+
+.fluid-subtable table tr {
+  height: $row-min-height;
+}
+
+.fluid-subtable table th {
+  @extend .table-header;
+}
+
+.fluid-subtable table tr td {
+  @extend .table-header;
+  cursor: $cursor-pointer;
+}
+
+.fluid-subtable .panel-heading {
+  height: 50px;
+}
+
+.fluid-subtable .panel-title {
+  margin-top: -9px;
+}

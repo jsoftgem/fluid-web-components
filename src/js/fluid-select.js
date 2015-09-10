@@ -6,11 +6,9 @@ angular.module("fluid.webComponents.fluidSelect", [])
         return {
             scope: {
                 model: "=",
-                label: "@",
                 fieldGroup: "@",
                 fieldValue: "@",
                 fieldLabel: "@",
-                sourceUrl: "@",
                 change: "&",
                 name: "@",
                 method: "@"
@@ -21,10 +19,14 @@ angular.module("fluid.webComponents.fluidSelect", [])
             link: function (scope, element, attr) {
                 scope.loaded = false;
 
+                if (attr.label) {
+                    scope.label = attr.label;
+                }
+
                 scope.load = function () {
-                    if (scope.sourceUrl) {
+                    if (attr.sourceUrl) {
                         scope.isLoading = true;
-                        h({method: scope.method, url: scope.sourceUrl}).success(function (sourceList) {
+                        h({method: scope.method, url: attr.sourceUrl}).success(function (sourceList) {
                             scope.sourceList = sourceList;
                             scope.addElements();
                             c(dropDown.contents())(scope);
@@ -46,8 +48,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     scope.method = "GET";
                 }
 
-                if (!scope.name && scope.label) {
-                    scope.name = scope.label.trim().split(" ").join("_");
+                if (!scope.name && attr.label) {
+                    scope.name = attr.label.trim().split(" ").join("_");
                 }
 
                 scope.options = "item in sourceList";
@@ -81,9 +83,9 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     var item = $("<a>").attr("ng-click", "select(" + itemValue + ",item,$index)").addClass("morris-hover-point").text(itemLabel).appendTo(listElements);
                 };
 
-                scope.$watch(function (scope) {
-                    return scope.sourceUrl;
-                }, function (value) {
+                scope.$watch(function () {
+                    return attr.sourceUrl;
+                }, function () {
                     scope.loaded = false;
                 });
 
