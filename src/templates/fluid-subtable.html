@@ -1,46 +1,26 @@
 <div class="fluid-subtable">
     <ng-transclude></ng-transclude>
-    <div class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <form class="modal-content" role="form">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{label}}</h4>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <div ng-switch="action">
-                        <button type="submit" class="btn btn-info btn-lg create">{{action == 'Edit' ? 'Update' :
-                            action}}
-                        </button>
-                        <button ng-if="action=='Edit'" type="button" class="btn btn-danger btn-lg" ng-click="delete()">
-                            Delete
-                        </button>
-                        <button type="button" class="btn btn-danger btn-lg" ng-click="hideModal()">Cancel</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
     <div class="panel">
         <div class="panel-heading">
             <span class="panel-title">
                <b>{{label}}</b>
             </span>
 
-            <div class="panel-title pull-right hidden-xs hidden-sm">
+            <div class="panel-title pull-right">
 
                 <button type="button" class="btn btn-lg btn-info" ng-click="showModal('create')"><i
                         class="fa fa-plus"></i>
                 </button>
-                <button ng-if="sourceUrl" type="button" class="btn btn-lg btn-warning"><i class="fa fa-search"></i>
+                <button type="button" class="btn btn-lg btn-danger" ng-click="model=[]"><i
+                        class="fa fa-eraser"></i>
                 </button>
-            </div>
+                <button source-url="{{sourceUrl}}" fluid-lookup type="button" class="btn btn-lg btn-warning"
+                        on-lookup="{{selectItemFn}}"
+                        method="{{method}}"
+                        label="{{label}}"><i
+                        class="fa fa-search"></i>
+                </button>
 
-            <div class="panel-title pull-right hidden-md hidden-lg">
-                <fluid-select change="change(item)" info values="Create,Search" model="selectValue"></fluid-select>
             </div>
         </div>
         <table class="panel-body table table-striped table-condensed table-hover">

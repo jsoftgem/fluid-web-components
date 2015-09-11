@@ -12,26 +12,26 @@
 <div class="form-group col-lg-3">
     <fluid-subtable primary key-var="item" label="SubTable" model="labelList"
                     source-url="http://192.168.1.3:9080/rex-services/factories/war/table_factories/samples">
-        <fluid-subcolumn name="value" header="Value">
+        <fluid-subcolumn name="name" header="Name">
+            <div class="column-row">
+                {{item.name}}
+            </div>
+            <div class="column-form form-group">
+                <label class="control-label" for="label1">
+                    Name
+                </label>
+                <input id="label1" class="form-control" ng-model="item.name" type="text" placeholder="Name">
+            </div>
+        </fluid-subcolumn>
+        <fluid-subcolumn name="label" header="Label">
             <div class="column-row">
                 {{item.label}}
             </div>
             <div class="column-form form-group">
-                <label class="control-label" for="label1">
+                <label class="control-label" for="label2">
                     Label
                 </label>
-                <input id="label1" class="form-control" ng-model="item.label" type="text" placeholder="Label">
-            </div>
-        </fluid-subcolumn>
-        <fluid-subcolumn name="value2" header="Value2">
-            <div class="column-row">
-                {{item.label2}}
-            </div>
-            <div class="column-form form-group">
-                <label class="control-label" for="label2">
-                    Label 2
-                </label>
-                <input id="label2" class="form-control" ng-model="item.label2" type="text" placeholder="Label2">
+                <input id="label2" class="form-control" ng-model="item.label" type="text" placeholder="Label">
             </div>
         </fluid-subcolumn>
     </fluid-subtable>

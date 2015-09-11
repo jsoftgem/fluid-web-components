@@ -1,0 +1,37 @@
+@import "../variables";
+
+.fluid-lookup {
+  color: $text-color;
+}
+
+.default-grid {
+  padding: 0;
+  text-align: center;
+  border-radius: $border-radius;
+  margin: 2px;
+  display: inline-block;
+}
+
+.fluid-lookup .grid {
+  @extend .default-grid;
+  background: $brand-info;
+}
+
+.fluid-lookup .grid:hover {
+  @extend .default-grid;
+  cursor: $cursor-pointer;
+  background: $brand-primary;
+  color: $text-active;
+}
+
+.fluid-lookup .grid .header {
+
+}
+
+.fluid-lookup .grid .description {
+
+}
+
+.fluid-lookup .column {
+
+}

@@ -9,3 +9,21 @@ $text-align-component-caret: center;
 $margin-caret: 10px;
 $dropdown-maxHeight: 300px;
 $row-min-height: 40px;
+
+$gray-base: #000;
+$gray-darker: lighten($gray-base, 13.5%);
+$gray-dark: lighten($gray-base, 20%);
+$gray: lighten($gray-base, 33.5%);
+$gray-light: lighten($gray-base, 46.7%);
+$gray-lighter: lighten($gray-base, 93.5%);
+$brand-primary: darken(#428bca, 6.5%);
+$border-radius: 4px;
+
+$brand-success: #5cb85c;
+$brand-info: #5bc0de;
+$brand-warning: #f0ad4e;
+$brand-danger: #d9534f;
+$text-color: $gray-dark;
+$text-active: #fff;
+
+$grid-margin: 15px;

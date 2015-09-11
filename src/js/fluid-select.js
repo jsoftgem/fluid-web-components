@@ -80,7 +80,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
 
                 scope.addElements = function () {
                     var listElements = $("<li>").addClass("fluid-select-item").attr("ng-repeat", scope.options).appendTo(dropDown);
-                    var item = $("<a>").attr("ng-click", "select(" + itemValue + ",item,$index)").addClass("morris-hover-point").text(itemLabel).appendTo(listElements);
+                    var item = $("<a>").attr("ng-click", "select(" + itemValue + ",item,$index,$event)").addClass("morris-hover-point").text(itemLabel).appendTo(listElements);
                 };
 
                 scope.$watch(function () {
@@ -95,9 +95,9 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     scope.loaded = false;
                 });
 
-                scope.select = function (item, full, $index) {
+                scope.select = function (item, full, $index, $event) {
                     scope.model = item;
-                    scope.change({item: item, full: full, index: $index});
+                    scope.change({item: item, full: full, $index: $index, $event: $event});
                 };
 
 

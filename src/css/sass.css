@@ -31,6 +31,10 @@
   padding: 5px;
 }
 
+.fluid-grid {
+  margin: 15px;
+}
+
 .fluid-subtable table {
   width: 100%;
 }
@@ -49,4 +53,26 @@
 
 .fluid-subtable .panel-title {
   margin-top: -9px;
+}
+
+.fluid-lookup {
+  color: #333333;
+}
+
+.default-grid, .fluid-lookup .grid, .fluid-lookup .grid:hover {
+  padding: 0;
+  text-align: center;
+  border-radius: 4px;
+  margin: 2px;
+  display: inline-block;
+}
+
+.fluid-lookup .grid {
+  background: #5bc0de;
+}
+
+.fluid-lookup .grid:hover {
+  cursor: pointer;
+  background: #337ab7;
+  color: white;
 }

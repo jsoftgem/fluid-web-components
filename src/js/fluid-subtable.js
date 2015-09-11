@@ -2,7 +2,7 @@
  * Created by Jerico on 10/09/2015.
  */
 angular.module("fluid.webComponents.fluidSubTable", [])
-    .directive("fluidSubtable", ["$templateCache", "$compile", function (tc, c) {
+    .directive("fluidSubtable", ["$templateCache", "$compile", "lookUp", function (tc, c, lookUp) {
 
         return {
             restrict: "AE",
@@ -13,6 +13,11 @@ angular.module("fluid.webComponents.fluidSubTable", [])
             link: function (scope, element, attr) {
 
                 scope.columns = [];
+                scope.method = "get";
+                if (attr.method) {
+                    scope.method = attr.method;
+                }
+
 
                 if (!scope.model) {
                     scope.model = [];
@@ -21,11 +26,19 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                 if (attr.sourceUrl) {
                     scope.sourceUrl = attr.sourceUrl;
                 }
+                if (attr.label) {
+                    scope.label = attr.label;
+                }
+                if (!attr.keyVar) {
+                    throw "KeyVar is required.";
+                }
 
 
-                var modal = element.find(".modal");
+                scope.selectItemFn = "selectLookUp(" + attr.keyVar + ",$event)";
 
+                var modal = getSubTableModal();
 
+                modal.appendTo(element);
                 scope.validate = function (value) {
                     return true;
                 };
@@ -74,17 +87,36 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
                 };
 
-                scope.change = function (item) {
+                scope.change = function (item, full, $index, $event) {
+                    console.debug("fluidSubtable.event", $event);
                     if (item === "Create") {
                         scope.action = item;
                         scope.selectValue = undefined;
                         modal.modal("show");
+                    } else if (item === "Search") {
+                        lookUp.open({
+                            method: scope.method,
+                            sourceUrl: scope.sourceUrl,
+                            event: $event,
+                            label: attr.label
+                        });
                     }
                 };
 
                 scope.select = function (item) {
                     scope.selectedItem = item;
                 }
+
+                scope.selectLookUp = function (item, $event) {
+                    if (scope.validate) {
+                        if (scope.validate({value: item})) {
+                            scope.model.push(item);
+                        }
+                    } else {
+                        scope.model.push(item);
+                    }
+                }
+
 
                 scope.delete = function () {
                     scope.model.splice(scope.index, 1);
@@ -93,19 +125,27 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
 
                 var transclude = element.find("ng-transclude");
+
+                var grid = $("<fluid-lookup-grid>").attr("key-var", attr.keyVar);
+                var gridContainer = $("<div>").addClass("fluid-grid").appendTo(grid);
+                if (attr.lookupTemplate) {
+                    grid.attr("lookup-template", attr.lookupTemplate);
+                }
+
                 transclude.find("fluid-subcolumn").each(function () {
                     var column = JSON.parse($(this).attr("column"));
+                    $("<div>").html("{{item." + column.name + "}}").appendTo(gridContainer);
                     scope.columns.push(column);
                 });
 
-                if (attr.label) {
-                    scope.label = attr.label;
-                }
-                if (!attr.keyVar) {
-                    throw "KeyVar is required.";
+
+                if (scope.sourceUrl) {
+                    var fluidLookup = element.find("button[fluid-lookup]");
+                    grid.appendTo(fluidLookup);
+                    c(fluidLookup)(scope);
                 }
 
-                setTable(element, attr.keyVar, c, scope);
+                setTable(element, attr.keyVar, c, scope, modal);
                 transclude.remove();
 
             }
@@ -147,7 +187,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
     }]);
 
 
-function setTable(element, keyVar, compile, scope) {
+function setTable(element, keyVar, compile, scope, modal) {
 
     var table = element.find("table");
     var tr = $("<tr>").attr("ng-repeat", keyVar + " in model track by $index");
@@ -167,13 +207,12 @@ function setTable(element, keyVar, compile, scope) {
     tr.appendTo(table);
     compile(table)(scope);
 
-    var modal = element.find(".modal");
     var form = modal.find(".modal-content");
+
     form.attr("ng-submit", "save(action," + keyVar + ")");
     modal.on("hidden.bs.modal", function (e) {
         scope.action = undefined;
     });
-
 
     var modalBody = modal.find(".modal-body");
     for (var i = 0; i < scope.columns.length; i++) {
@@ -183,4 +222,16 @@ function setTable(element, keyVar, compile, scope) {
     compile(modal.contents())(scope);
 
 
+}
+
+function getSubTableModal() {
+    return $("<div class='modal fade fluid-subtable-form' tabindex='-1' role='dialog'>" +
+        "<div class='modal-dialog'>" +
+        "<form class='modal-content' role='form'>" +
+        "<div class='modal-header'>" +
+        "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button> " +
+        "<h4 class='modal-title'>{{label}}</h4> </div> <div class='modal-body'> </div> " +
+        "<div class='modal-footer'> <div ng-switch='action'> <button type='submit' class='btn btn-info btn-lg create'>{{action == 'Edit' ? 'Update' :action }} </button> " +
+        "<button ng-if=\"action=='Edit'\" type='button' class='btn btn-danger btn-lg' ng-click='delete()'>Delete </button> " +
+        "<button type='button' class='btn btn-danger btn-lg' ng-click='hideModal()'>Cancel</button> </div> </div> </form> </div> </div>");
 }

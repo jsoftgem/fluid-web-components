@@ -14,7 +14,7 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("panel-info");
                 } else if (element.hasClass("fluid-subtable")) {
                     element.find(".panel").addClass("panel-info");
-                    element.find(".modal").addClass("modal-")
+                    element.find(".modal.fluid-subtable-form").find(".modal-header").addClass("bg-info");
                 }
 
             }
@@ -32,6 +32,7 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("panel-warning");
                 } else if (element.hasClass("fluid-subtable")) {
                     element.find(".panel").addClass("panel-warning");
+                    element.find(".modal.fluid-subtable-form").find(".modal-header").addClass("bg-warning");
                 }
             }
         }
@@ -48,6 +49,9 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("panel-danger");
                 } else if (element.hasClass("fluid-subtable")) {
                     element.find(".panel").addClass("panel-danger");
+                    element.find(".modal.fluid-subtable-form").find(".modal-header").addClass("bg-danger");
+                } else if (element.hasClass("fluid-lookup")) {
+                    element.find(".modal").find(".modal-header").addClass("bg-danger");
                 }
             }
         }
@@ -80,6 +84,9 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.addClass("panel-primary");
                 } else if (element.hasClass("fluid-subtable")) {
                     element.find(".panel").addClass("panel-primary");
+                    element.find(".modal.fluid-subtable-form").find(".modal-header").addClass("bg-primary");
+                } else if (element.hasClass("fluid-lookup")) {
+                    element.find(".modal").find(".modal-header").addClass("bg-primary");
                 }
             }
         }
