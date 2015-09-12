@@ -16,6 +16,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     lookUp.open({
                         event: e,
                         method: method,
+                        values: attr.values,
                         sourceUrl: attr.sourceUrl,
                         label: attr.label
                     });
