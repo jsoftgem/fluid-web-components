@@ -7,10 +7,10 @@
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body ng-controller="sampleCtrl">
+<body ng-controller="sampleCtrl as sample">
 <div class="container" style="margin-top:50px">
     <div class="form-group">
-        <fluid-subtable primary key-var="item" label="SubTable" model="labelList" factory="samples">
+        <fluid-subtable primary key-var="item" label="SubTable" model="sample.labelList" factory="samples">
             <fluid-subcolumn name="name" header="Name">
                 <div class="column-row">
                     {{item.name}}
@@ -43,7 +43,7 @@
                 </div>
                 <div class="column-form">
                     <div class="form-group">
-                        <fluid-subcomponent tag="fluid-select" info change="change()"
+                        <fluid-subcomponent tag="fluid-select" info
                                             source-url="http://localhost:8080/rex-services/factories/war/table_factories/years"
                                             label="Years" model="item.year"></fluid-subcomponent>
                     </div>

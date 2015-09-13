@@ -2,7 +2,7 @@
  * Created by rickzx98 on 9/5/15.
  */
 angular.module("fluid.webComponents.fluidSelect", [])
-    .directive("fluidSelect", ["$templateCache", "$http", "$compile", function (tc, h, c) {
+    .directive("fluidSelect", ["$templateCache", "$http", "$compile", "$injector", function (tc, h, c, inj) {
         return {
             scope: {
                 model: "=",
@@ -40,6 +40,13 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         c(dropDown.contents())(scope);
                         scope.isLoading = false;
                         scope.loaded = true;
+                    } else if (attr.factory) {
+                        scope.isLoading = true;
+                        scope.sourceList = inj.get(attr.factory);
+                        scope.addElements();
+                        c(dropDown.contents())(scope);
+                        scope.isLoading = false;
+                        scope.loaded = true;
                     }
 
                 };
@@ -69,11 +76,10 @@ angular.module("fluid.webComponents.fluidSelect", [])
                 var label = element.find("span.label");
                 label.attr("ng-if", "model");
                 if (scope.fieldValue) {
-                    label.attr("ng-repeat", "item in sourceList | filter : {" + scope.fieldValue + ": model}");
+                    label.attr("ng-repeat", "item in sourceList | filter : {" + scope.fieldValue + ": model} | limitTo: 1");
                 } else {
-                    label.attr("ng-repeat", "item in sourceList | filter : model");
+                    label.attr("ng-repeat", "item in sourceList | filter : model | limitTo: 1");
                 }
-
                 label.html(itemLabel);
 
                 c(label)(scope);
@@ -92,6 +98,12 @@ angular.module("fluid.webComponents.fluidSelect", [])
                 scope.$watch(function () {
                     return attr.values;
                 }, function (value) {
+                    scope.loaded = false;
+                });
+
+                scope.$watch(function () {
+                    return attr.factory;
+                }, function () {
                     scope.loaded = false;
                 });
 

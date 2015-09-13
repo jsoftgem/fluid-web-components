@@ -86,7 +86,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     modal.modal("show");
                     if (action === "create") {
                         scope.action = "Create";
-                        scope.item = undefined;
+                        scope.item = {};
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
@@ -242,8 +242,6 @@ function setTable(element, keyVar, compile, scope, modal) {
         $(col.form).appendTo(modalBody);
     }
     compile(modal.contents())(scope);
-
-
 }
 
 function getSubTableModal() {

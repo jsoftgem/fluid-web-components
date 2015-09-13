@@ -180,7 +180,7 @@ function getModal() {
  * Created by rickzx98 on 9/5/15.
  */
 angular.module("fluid.webComponents.fluidSelect", [])
-    .directive("fluidSelect", ["$templateCache", "$http", "$compile", function (tc, h, c) {
+    .directive("fluidSelect", ["$templateCache", "$http", "$compile", "$injector", function (tc, h, c, inj) {
         return {
             scope: {
                 model: "=",
@@ -218,6 +218,13 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         c(dropDown.contents())(scope);
                         scope.isLoading = false;
                         scope.loaded = true;
+                    } else if (attr.factory) {
+                        scope.isLoading = true;
+                        scope.sourceList = inj.get(attr.factory);
+                        scope.addElements();
+                        c(dropDown.contents())(scope);
+                        scope.isLoading = false;
+                        scope.loaded = true;
                     }
 
                 };
@@ -247,11 +254,10 @@ angular.module("fluid.webComponents.fluidSelect", [])
                 var label = element.find("span.label");
                 label.attr("ng-if", "model");
                 if (scope.fieldValue) {
-                    label.attr("ng-repeat", "item in sourceList | filter : {" + scope.fieldValue + ": model}");
+                    label.attr("ng-repeat", "item in sourceList | filter : {" + scope.fieldValue + ": model} | limitTo: 1");
                 } else {
-                    label.attr("ng-repeat", "item in sourceList | filter : model");
+                    label.attr("ng-repeat", "item in sourceList | filter : model | limitTo: 1");
                 }
-
                 label.html(itemLabel);
 
                 c(label)(scope);
@@ -270,6 +276,12 @@ angular.module("fluid.webComponents.fluidSelect", [])
                 scope.$watch(function () {
                     return attr.values;
                 }, function (value) {
+                    scope.loaded = false;
+                });
+
+                scope.$watch(function () {
+                    return attr.factory;
+                }, function () {
                     scope.loaded = false;
                 });
 
@@ -311,9 +323,8 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
             replace: true,
             collection: true,
             link: function (scope, element, attr) {
-
                 if (attr.tag) {
-                    var subComponent = $(fc.getSubcomponent(attr.tag));
+                    var subComponent = $(fc.getSubcomponent(attr.tag).htmlTag);
                     $.each(attr.$attr, function (k, v) {
                         if (k === "tag") {
                         } else if (k === "fluidSubcomponent") {
@@ -331,18 +342,30 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
         };
 
         return fluidSubcomponent;
-    }])
-    .service("fluidSubcomponent", [function () {
+    }]).provider("fluidSubcomponent", function fluidSubcomponentProvider() {
         this.subcomponents = [];
-        this.subcomponents["fluid-select"] = "<fluid-select>";
-        this.addSubcomponent = function (name, tag) {
-            this.subcomponents[name] = tag;
-        }
-        this.getSubcomponent = function (name) {
-            return this.subcomponents[name];
-        }
-        return this;
-    }]);
+
+        this.subcomponents["fluid-select"] = {
+            htmlTag: "<fluid-select>",
+            events: ['change']
+        };
+
+        this.setSubcomponent = function (name, options) {
+            this.subcomponents[name] = options;
+            return this;
+        };
+
+        this.$get = [function () {
+            var subcom = new fluidSubcomponentProvider();
+
+            subcom.getSubcomponent = function (name) {
+                return subcom.subcomponents[name];
+            };
+
+            return subcom;
+        }]
+
+    });
 ;/**
  * Created by Jerico on 10/09/2015.
  */
@@ -431,7 +454,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     modal.modal("show");
                     if (action === "create") {
                         scope.action = "Create";
-                        scope.item = undefined;
+                        scope.item = {};
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
@@ -587,8 +610,6 @@ function setTable(element, keyVar, compile, scope, modal) {
         $(col.form).appendTo(modalBody);
     }
     compile(modal.contents())(scope);
-
-
 }
 
 function getSubTableModal() {
@@ -729,15 +750,12 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
+        scope.change = function (item) {
+            console.debug("sampleCtrl.change", item);
+        }
     }])
     .factory("samples", function () {
-        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
-            "name": "rer",
-            "label": "wer"
-        }, {"name": "3", "label": "w"}, {"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
-            "name": "rer",
-            "label": "wer"
-        }, {"name": "3", "label": "w"}]
+        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}]
     });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
 
 angular.module("templates/fluid-select.html", []).run(["$templateCache", function($templateCache) {

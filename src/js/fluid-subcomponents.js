@@ -8,9 +8,8 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
             replace: true,
             collection: true,
             link: function (scope, element, attr) {
-
                 if (attr.tag) {
-                    var subComponent = $(fc.getSubcomponent(attr.tag));
+                    var subComponent = $(fc.getSubcomponent(attr.tag).htmlTag);
                     $.each(attr.$attr, function (k, v) {
                         if (k === "tag") {
                         } else if (k === "fluidSubcomponent") {
@@ -28,15 +27,27 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
         };
 
         return fluidSubcomponent;
-    }])
-    .service("fluidSubcomponent", [function () {
+    }]).provider("fluidSubcomponent", function fluidSubcomponentProvider() {
         this.subcomponents = [];
-        this.subcomponents["fluid-select"] = "<fluid-select>";
-        this.addSubcomponent = function (name, tag) {
-            this.subcomponents[name] = tag;
-        }
-        this.getSubcomponent = function (name) {
-            return this.subcomponents[name];
-        }
-        return this;
-    }]);
+
+        this.subcomponents["fluid-select"] = {
+            htmlTag: "<fluid-select>",
+            events: ['change']
+        };
+
+        this.setSubcomponent = function (name, options) {
+            this.subcomponents[name] = options;
+            return this;
+        };
+
+        this.$get = [function () {
+            var subcom = new fluidSubcomponentProvider();
+
+            subcom.getSubcomponent = function (name) {
+                return subcom.subcomponents[name];
+            };
+
+            return subcom;
+        }]
+
+    });

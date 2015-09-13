@@ -34,13 +34,10 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
+        scope.change = function (item) {
+            console.debug("sampleCtrl.change", item);
+        }
     }])
     .factory("samples", function () {
-        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
-            "name": "rer",
-            "label": "wer"
-        }, {"name": "3", "label": "w"}, {"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
-            "name": "rer",
-            "label": "wer"
-        }, {"name": "3", "label": "w"}]
+        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}]
     });
