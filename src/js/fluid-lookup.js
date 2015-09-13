@@ -18,7 +18,8 @@ angular.module("fluid.webComponents.fluidLookup", [])
                         method: method,
                         values: attr.values,
                         sourceUrl: attr.sourceUrl,
-                        label: attr.label
+                        label: attr.label,
+                        factory: attr.factory
                     });
                 });
 
@@ -52,13 +53,14 @@ angular.module("fluid.webComponents.fluidLookup", [])
         };
         return fluidLookUpGrid;
     }])
-    .service("lookUp", ["$compile", "$http", function (c, h) {
+    .service("lookUp", ["$compile", "$http", "$injector", "$timeout", function (c, h, inj, t) {
 
         this.open = function (options) {
 
             var event = options.event;
             var method = options.method;
             var sourceUrl = options.sourceUrl;
+            var factory = options.factory;
 
             var scope = angular.element($(event.currentTarget)).scope();
 
@@ -74,7 +76,8 @@ angular.module("fluid.webComponents.fluidLookup", [])
 
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
-                var selectorGrid = $("<div>").addClass("grid").attr("ng-repeat", grid.keyVar + " in data").appendTo(modalBody).html(grid.html);
+                var selectorGrid = $("<div>").addClass("grid").attr("ng-repeat", grid.keyVar + " in data").appendTo(modalBody);
+                selectorGrid.html(grid.html);
                 if (source.attr("on-lookup")) {
                     selectorGrid.attr("ng-click", source.attr("on-lookup"));
                 }
@@ -82,16 +85,28 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 //TODO: table
             }
 
+            console.debug("lookupFactory.modalBody", modalBody.html());
             c(modal)(scope);
-            $(event.currentTarget).html(loader);
-            h({
-                method: method,
-                url: sourceUrl
-            }).success(function (data) {
-                $(event.currentTarget).html(oldHtml);
-                scope.data = data;
-                modal.modal("show");
-            });
+            if (sourceUrl) {
+                $(event.currentTarget).html(loader);
+                h({
+                    method: method,
+                    url: sourceUrl
+                }).success(function (data) {
+                    $(event.currentTarget).html(oldHtml);
+                    scope.data = data;
+                    modal.modal("show");
+                });
+            } else if (factory) {
+                t(function () {
+                    scope.data = inj.get(factory);
+                    console.debug("lookupFactory", scope.data);
+                    console.debug("lookupFactory.html", modal.html());
+                    modal.modal("show");
+                });
+
+            }
+
         }
 
     }]);

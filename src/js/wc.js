@@ -1,7 +1,7 @@
 /**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -34,5 +34,13 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bo
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
-        scope.labelList = [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}];
-    }]);
+    }])
+    .factory("samples", function () {
+        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
+            "name": "rer",
+            "label": "wer"
+        }, {"name": "3", "label": "w"}, {"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
+            "name": "rer",
+            "label": "wer"
+        }, {"name": "3", "label": "w"}]
+    });

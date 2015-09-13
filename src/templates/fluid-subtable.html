@@ -14,10 +14,12 @@
                 <button type="button" class="btn btn-lg btn-danger" ng-click="model=[]"><i
                         class="fa fa-eraser"></i>
                 </button>
-                <button source-url="{{sourceUrl}}" fluid-lookup type="button" class="btn btn-lg btn-warning"
+                <button source-url="{{sourceUrl}}" fluid-lookup type="button"
+                        class="btn btn-lg btn-warning"
                         on-lookup="{{selectItemFn}}"
                         method="{{method}}"
-                        label="{{label}}"><i
+                        label="{{label}}"
+                        factory="{{factory}}"><i
                         class="fa fa-search"></i>
                 </button>
 

@@ -33,15 +33,22 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     throw "KeyVar is required.";
                 }
 
+                if (attr.factory) {
+                    scope.factory = attr.factory;
+                }
 
                 scope.selectItemFn = "selectLookUp(" + attr.keyVar + ",$event)";
 
                 var modal = getSubTableModal();
 
                 modal.appendTo(element);
+
                 scope.validate = function (value) {
                     return true;
                 };
+
+
+                console.debug("fluidSubtable.validate", scope.validate);
 
                 scope.save = function (type, item) {
                     if (type === "Create") {
@@ -61,6 +68,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     } else if (type === "Edit") {
                         if (scope.validate) {
                             if (scope.validate({value: item})) {
+                                scope.model[scope.index] = item;
                                 scope.hideModal();
                             }
                         } else {
@@ -82,7 +90,8 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
-                        scope.item = scope.model[scope.index];
+                        scope.item = {};
+                        angular.copy(scope.model[scope.index], scope.item);
                     }
 
                 };
@@ -138,11 +147,15 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     scope.columns.push(column);
                 });
 
+                console.debug("subTable.sourceUrl", scope.sourceUrl);
+                console.debug("subTable.factory", scope.factory);
+                var fluidLookup = element.find("button[fluid-lookup]");
 
-                if (scope.sourceUrl) {
-                    var fluidLookup = element.find("button[fluid-lookup]");
+                if (scope.sourceUrl || scope.factory) {
                     grid.appendTo(fluidLookup);
                     c(fluidLookup)(scope);
+                } else {
+                    fluidLookup.addClass("hidden");
                 }
 
                 setTable(element, attr.keyVar, c, scope, modal);
@@ -152,40 +165,49 @@ angular.module("fluid.webComponents.fluidSubTable", [])
         }
 
     }])
-    .directive("fluidSubcolumn", [function () {
+    .directive("fluidSubcolumn", ["$compile", function (c) {
 
         return {
-            scope: false,
             restrict: "AE",
             template: "<div ng-transclude></div>",
-            link: function (scope, element, attr) {
+            link: {
+                pre: function (scope, element, attr, controller, transcludeFn) {
 
+                },
+                post: function (scope, element, attr) {
 
-                var column = {};
+                    var column = {};
+                    if (attr.name) {
+                        column.name = attr.name;
+                    } else {
+                        throw "Name attribute is required.";
+                    }
 
-                if (attr.name) {
-                    column.name = attr.name;
-                } else {
-                    throw "Name attribute is required.";
+                    if (attr.header) {
+                        column.header = attr.header;
+                    }
+
+                    if (attr.value) {
+                        column.value = attr.value;
+                    }
+
+                    var transclude = element.find("[ng-transclude]");
+
+                    column.row = transclude.find(".column-row").html();
+
+                    var form = transclude.find(".column-form").html();
+
+                    column.form = form;
+
+                    console.debug("fluidSubcolumn.column", column);
+
+                    element.attr("column", JSON.stringify(column));
                 }
-
-                if (attr.header) {
-                    column.header = attr.header;
-                }
-
-                if (attr.value) {
-                    column.value = attr.value;
-                }
-                column.row = element.find("[ng-transclude]").find(".column-row").html();
-                column.form = element.find("[ng-transclude]").find(".column-form").html();
-                element.attr("column", JSON.stringify(column));
-
             },
             transclude: true
         }
 
     }]);
-
 
 function setTable(element, keyVar, compile, scope, modal) {
 

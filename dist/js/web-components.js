@@ -59,8 +59,10 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     lookUp.open({
                         event: e,
                         method: method,
+                        values: attr.values,
                         sourceUrl: attr.sourceUrl,
-                        label: attr.label
+                        label: attr.label,
+                        factory: attr.factory
                     });
                 });
 
@@ -94,13 +96,14 @@ angular.module("fluid.webComponents.fluidLookup", [])
         };
         return fluidLookUpGrid;
     }])
-    .service("lookUp", ["$compile", "$http", function (c, h) {
+    .service("lookUp", ["$compile", "$http", "$injector", "$timeout", function (c, h, inj, t) {
 
         this.open = function (options) {
 
             var event = options.event;
             var method = options.method;
             var sourceUrl = options.sourceUrl;
+            var factory = options.factory;
 
             var scope = angular.element($(event.currentTarget)).scope();
 
@@ -116,7 +119,8 @@ angular.module("fluid.webComponents.fluidLookup", [])
 
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
-                var selectorGrid = $("<div>").addClass("grid").attr("ng-repeat", grid.keyVar + " in data").appendTo(modalBody).html(grid.html);
+                var selectorGrid = $("<div>").addClass("grid").attr("ng-repeat", grid.keyVar + " in data").appendTo(modalBody);
+                selectorGrid.html(grid.html);
                 if (source.attr("on-lookup")) {
                     selectorGrid.attr("ng-click", source.attr("on-lookup"));
                 }
@@ -124,16 +128,28 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 //TODO: table
             }
 
+            console.debug("lookupFactory.modalBody", modalBody.html());
             c(modal)(scope);
-            $(event.currentTarget).html(loader);
-            h({
-                method: method,
-                url: sourceUrl
-            }).success(function (data) {
-                $(event.currentTarget).html(oldHtml);
-                scope.data = data;
-                modal.modal("show");
-            });
+            if (sourceUrl) {
+                $(event.currentTarget).html(loader);
+                h({
+                    method: method,
+                    url: sourceUrl
+                }).success(function (data) {
+                    $(event.currentTarget).html(oldHtml);
+                    scope.data = data;
+                    modal.modal("show");
+                });
+            } else if (factory) {
+                t(function () {
+                    scope.data = inj.get(factory);
+                    console.debug("lookupFactory", scope.data);
+                    console.debug("lookupFactory.html", modal.html());
+                    modal.modal("show");
+                });
+
+            }
+
         }
 
     }]);
@@ -286,6 +302,48 @@ angular.module("fluid.webComponents.fluidSelect", [])
     ])
 ;
 ;/**
+ * Created by jerico on 9/13/15.
+ */
+angular.module("fluid.webComponents.fluidSubcomponent", [])
+    .directive("fluidSubcomponent", ["fluidSubcomponent", function (fc) {
+        var fluidSubcomponent = {
+            restrict: "AE",
+            replace: true,
+            collection: true,
+            link: function (scope, element, attr) {
+
+                if (attr.tag) {
+                    var subComponent = $(fc.getSubcomponent(attr.tag));
+                    $.each(attr.$attr, function (k, v) {
+                        if (k === "tag") {
+                        } else if (k === "fluidSubcomponent") {
+                        } else {
+                            subComponent.attr(v, attr[k]);
+                        }
+                    });
+                    element.replaceWith(subComponent[0]);
+                    element.addClass("fluid-subcomponent");
+                } else {
+                    throw "Please define fluid web component tag [tag='']";
+                }
+            }
+
+        };
+
+        return fluidSubcomponent;
+    }])
+    .service("fluidSubcomponent", [function () {
+        this.subcomponents = [];
+        this.subcomponents["fluid-select"] = "<fluid-select>";
+        this.addSubcomponent = function (name, tag) {
+            this.subcomponents[name] = tag;
+        }
+        this.getSubcomponent = function (name) {
+            return this.subcomponents[name];
+        }
+        return this;
+    }]);
+;/**
  * Created by Jerico on 10/09/2015.
  */
 angular.module("fluid.webComponents.fluidSubTable", [])
@@ -320,15 +378,22 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     throw "KeyVar is required.";
                 }
 
+                if (attr.factory) {
+                    scope.factory = attr.factory;
+                }
 
                 scope.selectItemFn = "selectLookUp(" + attr.keyVar + ",$event)";
 
                 var modal = getSubTableModal();
 
                 modal.appendTo(element);
+
                 scope.validate = function (value) {
                     return true;
                 };
+
+
+                console.debug("fluidSubtable.validate", scope.validate);
 
                 scope.save = function (type, item) {
                     if (type === "Create") {
@@ -348,6 +413,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     } else if (type === "Edit") {
                         if (scope.validate) {
                             if (scope.validate({value: item})) {
+                                scope.model[scope.index] = item;
                                 scope.hideModal();
                             }
                         } else {
@@ -369,7 +435,8 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
-                        scope.item = scope.model[scope.index];
+                        scope.item = {};
+                        angular.copy(scope.model[scope.index], scope.item);
                     }
 
                 };
@@ -425,11 +492,15 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     scope.columns.push(column);
                 });
 
+                console.debug("subTable.sourceUrl", scope.sourceUrl);
+                console.debug("subTable.factory", scope.factory);
+                var fluidLookup = element.find("button[fluid-lookup]");
 
-                if (scope.sourceUrl) {
-                    var fluidLookup = element.find("button[fluid-lookup]");
+                if (scope.sourceUrl || scope.factory) {
                     grid.appendTo(fluidLookup);
                     c(fluidLookup)(scope);
+                } else {
+                    fluidLookup.addClass("hidden");
                 }
 
                 setTable(element, attr.keyVar, c, scope, modal);
@@ -439,40 +510,49 @@ angular.module("fluid.webComponents.fluidSubTable", [])
         }
 
     }])
-    .directive("fluidSubcolumn", [function () {
+    .directive("fluidSubcolumn", ["$compile", function (c) {
 
         return {
-            scope: false,
             restrict: "AE",
             template: "<div ng-transclude></div>",
-            link: function (scope, element, attr) {
+            link: {
+                pre: function (scope, element, attr, controller, transcludeFn) {
 
+                },
+                post: function (scope, element, attr) {
 
-                var column = {};
+                    var column = {};
+                    if (attr.name) {
+                        column.name = attr.name;
+                    } else {
+                        throw "Name attribute is required.";
+                    }
 
-                if (attr.name) {
-                    column.name = attr.name;
-                } else {
-                    throw "Name attribute is required.";
+                    if (attr.header) {
+                        column.header = attr.header;
+                    }
+
+                    if (attr.value) {
+                        column.value = attr.value;
+                    }
+
+                    var transclude = element.find("[ng-transclude]");
+
+                    column.row = transclude.find(".column-row").html();
+
+                    var form = transclude.find(".column-form").html();
+
+                    column.form = form;
+
+                    console.debug("fluidSubcolumn.column", column);
+
+                    element.attr("column", JSON.stringify(column));
                 }
-
-                if (attr.header) {
-                    column.header = attr.header;
-                }
-
-                if (attr.value) {
-                    column.value = attr.value;
-                }
-                column.row = element.find("[ng-transclude]").find(".column-row").html();
-                column.form = element.find("[ng-transclude]").find(".column-form").html();
-                element.attr("column", JSON.stringify(column));
-
             },
             transclude: true
         }
 
     }]);
-
 
 function setTable(element, keyVar, compile, scope, modal) {
 
@@ -616,7 +696,7 @@ angular.module("fluid.webComponents.bootstrap", [])
     }]);;/**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -649,8 +729,16 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.bo
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
-        scope.labelList = [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}];
-    }]);;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
+    }])
+    .factory("samples", function () {
+        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
+            "name": "rer",
+            "label": "wer"
+        }, {"name": "3", "label": "w"}, {"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}, {
+            "name": "rer",
+            "label": "wer"
+        }, {"name": "3", "label": "w"}]
+    });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
 
 angular.module("templates/fluid-select.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-select.html",
@@ -659,5 +747,5 @@ angular.module("templates/fluid-select.html", []).run(["$templateCache", functio
 
 angular.module("templates/fluid-subtable.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-subtable.html",
-    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><span class=\"panel-title\"><b>{{label}}</b></span><div class=\"panel-title pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info\" ng-click=\"showModal('create')\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger\" ng-click=\"model=[]\"><i class=\"fa fa-eraser\"></i></button> <button source-url=\"{{sourceUrl}}\" fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\" on-lookup=\"{{selectItemFn}}\" method=\"{{method}}\" label=\"{{label}}\"><i class=\"fa fa-search\"></i></button></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead><th ng-repeat=\"col in columns\">{{col.header}}</th></thead><tbody></tbody></table></div></div>");
+    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><span class=\"panel-title\"><b>{{label}}</b></span><div class=\"panel-title pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info\" ng-click=\"showModal('create')\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger\" ng-click=\"model=[]\"><i class=\"fa fa-eraser\"></i></button> <button source-url=\"{{sourceUrl}}\" fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\" on-lookup=\"{{selectItemFn}}\" method=\"{{method}}\" label=\"{{label}}\" factory=\"{{factory}}\"><i class=\"fa fa-search\"></i></button></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead><th ng-repeat=\"col in columns\">{{col.header}}</th></thead><tbody></tbody></table></div></div>");
 }]);
