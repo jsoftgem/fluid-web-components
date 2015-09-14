@@ -86,11 +86,10 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     modal.modal("show");
                     if (action === "create") {
                         scope.action = "Create";
-                        scope.item = {};
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
-                        scope.item = {};
+                        scope[attr.keyVar] = item;
                         angular.copy(scope.model[scope.index], scope.item);
                     }
 

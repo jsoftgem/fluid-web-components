@@ -349,6 +349,10 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
             htmlTag: "<fluid-select>",
             events: ['change']
         };
+        this.subcomponents["fluid-subtable"] = {
+            htmlTag: "<fluid-subtable>",
+            events: ['validate']
+        };
 
         this.setSubcomponent = function (name, options) {
             this.subcomponents[name] = options;
@@ -454,11 +458,10 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     modal.modal("show");
                     if (action === "create") {
                         scope.action = "Create";
-                        scope.item = {};
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
-                        scope.item = {};
+                        scope[attr.keyVar] = item;
                         angular.copy(scope.model[scope.index], scope.item);
                     }
 
@@ -765,5 +768,5 @@ angular.module("templates/fluid-select.html", []).run(["$templateCache", functio
 
 angular.module("templates/fluid-subtable.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-subtable.html",
-    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><span class=\"panel-title\"><b>{{label}}</b></span><div class=\"panel-title pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info\" ng-click=\"showModal('create')\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger\" ng-click=\"model=[]\"><i class=\"fa fa-eraser\"></i></button> <button source-url=\"{{sourceUrl}}\" fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\" on-lookup=\"{{selectItemFn}}\" method=\"{{method}}\" label=\"{{label}}\" factory=\"{{factory}}\"><i class=\"fa fa-search\"></i></button></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead><th ng-repeat=\"col in columns\">{{col.header}}</th></thead><tbody></tbody></table></div></div>");
+    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><div class=\"panel-title\"><span><b>{{label}}</b></span> <span class=\"pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info\" ng-click=\"showModal('create')\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger\" ng-click=\"model=[]\"><i class=\"fa fa-eraser\"></i></button> <button source-url=\"{{sourceUrl}}\" fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\" on-lookup=\"{{selectItemFn}}\" method=\"{{method}}\" label=\"{{label}}\" factory=\"{{factory}}\"><i class=\"fa fa-search\"></i></button></span></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead><th ng-repeat=\"col in columns\">{{col.header}}</th></thead><tbody></tbody></table></div></div>");
 }]);

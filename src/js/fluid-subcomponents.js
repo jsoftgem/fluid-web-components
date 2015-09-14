@@ -34,6 +34,10 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
             htmlTag: "<fluid-select>",
             events: ['change']
         };
+        this.subcomponents["fluid-subtable"] = {
+            htmlTag: "<fluid-subtable>",
+            events: ['validate']
+        };
 
         this.setSubcomponent = function (name, options) {
             this.subcomponents[name] = options;

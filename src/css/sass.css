@@ -47,12 +47,8 @@
   cursor: pointer;
 }
 
-.fluid-subtable .panel-heading {
-  height: 50px;
-}
-
 .fluid-subtable .panel-title {
-  margin-top: -9px;
+  height: 40px;
 }
 
 .fluid-lookup {

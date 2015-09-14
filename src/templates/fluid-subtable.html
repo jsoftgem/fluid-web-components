@@ -2,28 +2,31 @@
     <ng-transclude></ng-transclude>
     <div class="panel">
         <div class="panel-heading">
-            <span class="panel-title">
-               <b>{{label}}</b>
-            </span>
+            <div class="panel-title">
+                <span>
+                    <b>{{label}}</b>
+                </span>
 
-            <div class="panel-title pull-right">
+                <span class="pull-right">
 
-                <button type="button" class="btn btn-lg btn-info" ng-click="showModal('create')"><i
-                        class="fa fa-plus"></i>
-                </button>
-                <button type="button" class="btn btn-lg btn-danger" ng-click="model=[]"><i
-                        class="fa fa-eraser"></i>
-                </button>
-                <button source-url="{{sourceUrl}}" fluid-lookup type="button"
-                        class="btn btn-lg btn-warning"
-                        on-lookup="{{selectItemFn}}"
-                        method="{{method}}"
-                        label="{{label}}"
-                        factory="{{factory}}"><i
-                        class="fa fa-search"></i>
-                </button>
+                    <button type="button" class="btn btn-lg btn-info" ng-click="showModal('create')"><i
+                            class="fa fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-lg btn-danger" ng-click="model=[]"><i
+                            class="fa fa-eraser"></i>
+                    </button>
+                    <button source-url="{{sourceUrl}}" fluid-lookup type="button"
+                            class="btn btn-lg btn-warning"
+                            on-lookup="{{selectItemFn}}"
+                            method="{{method}}"
+                            label="{{label}}"
+                            factory="{{factory}}"><i
+                            class="fa fa-search"></i>
+                    </button>
 
+                </span>
             </div>
+
         </div>
         <table class="panel-body table table-striped table-condensed table-hover">
             <thead>
