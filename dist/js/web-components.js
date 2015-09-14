@@ -461,8 +461,9 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     } else if (action === "edit") {
                         scope.action = "Edit";
                         scope.index = $index;
-                        scope[attr.keyVar] = item;
-                        angular.copy(scope.model[scope.index], scope.item);
+                        scope.temp = {};
+                        angular.copy(scope.model[scope.index], scope.temp);
+                        scope[attr.keyVar] = scope.temp;
                     }
 
                 };
