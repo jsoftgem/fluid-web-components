@@ -2,25 +2,23 @@
     <ng-transclude></ng-transclude>
     <div class="panel">
         <div class="panel-heading">
-            <div class="panel-title">
+            <div class="panel-title fluid-table-panel-title">
                 <span>
-                    <b>{{label}}</b>
+                    <b class="fst-label"></b>
                 </span>
 
                 <span class="pull-right">
 
-                    <button type="button" class="btn btn-lg btn-info" ng-click="showModal('create')"><i
+                    <button type="button" class="btn btn-lg btn-info create"><i
                             class="fa fa-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-lg btn-danger" ng-click="model=[]"><i
+
+                    <button type="button" class="btn btn-lg btn-danger delete"><i
                             class="fa fa-eraser"></i>
                     </button>
-                    <button source-url="{{sourceUrl}}" fluid-lookup type="button"
-                            class="btn btn-lg btn-warning"
-                            on-lookup="{{selectItemFn}}"
-                            method="{{method}}"
-                            label="{{label}}"
-                            factory="{{factory}}"><i
+
+                    <button fluid-lookup type="button"
+                            class="btn btn-lg btn-warning"><i
                             class="fa fa-search"></i>
                     </button>
 
@@ -30,9 +28,6 @@
         </div>
         <table class="panel-body table table-striped table-condensed table-hover">
             <thead>
-            <th ng-repeat="col in columns">
-                {{col.header}}
-            </th>
             </thead>
             <tbody>
             </tbody>

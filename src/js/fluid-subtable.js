@@ -2,164 +2,118 @@
  * Created by Jerico on 10/09/2015.
  */
 angular.module("fluid.webComponents.fluidSubTable", [])
-    .directive("fluidSubtable", ["$templateCache", "$compile", "lookUp", function (tc, c, lookUp) {
+    .directive("fluidSubtable", ["$templateCache", "$compile", "$timeout", "$filter", function (tc, c, t, f) {
+
 
         return {
             restrict: "AE",
+            require: "ngModel",
             template: tc.get("templates/fluid-subtable.html"),
             transclude: true,
-            replace: true,
-            scope: {model: "=", validate: "&"},
-            link: function (scope, element, attr) {
+            link: {
+                pre: function (scope, element, attr) {
+                    var loaded = attr.tableLoaded;
+                    if (!loaded) {
+                        var fluidLookupButton = element.find("button[fluid-lookup]");
 
-                scope.columns = [];
-                scope.method = "get";
-                if (attr.method) {
-                    scope.method = attr.method;
-                }
-
-
-                if (!scope.model) {
-                    scope.model = [];
-                }
-
-                if (attr.sourceUrl) {
-                    scope.sourceUrl = attr.sourceUrl;
-                }
-                if (attr.label) {
-                    scope.label = attr.label;
-                }
-                if (!attr.keyVar) {
-                    throw "KeyVar is required.";
-                }
-
-                if (attr.factory) {
-                    scope.factory = attr.factory;
-                }
-
-                scope.selectItemFn = "selectLookUp(" + attr.keyVar + ",$event)";
-
-                var modal = getSubTableModal();
-
-                modal.appendTo(element);
-
-                scope.validate = function (value) {
-                    return true;
-                };
-
-
-                console.debug("fluidSubtable.validate", scope.validate);
-
-                scope.save = function (type, item) {
-                    if (type === "Create") {
-                        if (item) {
-                            if (scope.validate) {
-                                if (scope.validate({value: item})) {
-                                    scope.model.push(item);
-                                    scope.hideModal();
-                                }
-                            } else {
-                                scope.model.push(item);
-                                scope.hideModal();
-                            }
-
-                            console.debug("create.item", item);
+                        if (!attr.keyVar) {
+                            throw "key-var attribute is required."
                         }
-                    } else if (type === "Edit") {
-                        if (scope.validate) {
-                            if (scope.validate({value: item})) {
-                                scope.model[scope.index] = item;
-                                scope.hideModal();
+
+                        if (attr.sourceUrl) {
+                            fluidLookupButton.attr("source-url", attr.sourceUrl);
+                        }
+
+                        if (attr.factory) {
+                            fluidLookupButton.attr("factory", attr.factory);
+                        }
+
+                        if (attr.label) {
+                            element.find(".fst-label").html(attr.label);
+                            fluidLookupButton.attr("label", attr.label);
+                        }
+
+                        if (attr.method) {
+                            fluidLookupButton.attr("method", method);
+                        }
+
+                        if (!scope[attr.ngModel]) {
+                            scope[attr.ngModel] = [];
+                            t(function () {
+                                scope.$apply();
+                            })
+                        }
+
+                        var bootstrapBrand = getBootstrapBrand(attr);
+
+
+                        fluidLookupButton.attr("on-lookup", attr.ngModel + ".push(gridItem)").attr(bootstrapBrand, "");
+
+                    }
+                },
+                post: function (scope, element, attr, ngModel) {
+                    var loaded = attr.tableLoaded;
+                    var columns = [];
+                    var fluidLookupButton = element.find("button[fluid-lookup]");
+                    var transclude = element.find("ng-transclude");
+                    console.debug("fluidSubtable.transclude", transclude[0]);
+                    var validate = "true";
+                    var grid = $("<fluid-lookup-grid>").attr("key-var", "gridItem");
+                    var gridContainer = $("<div>").addClass("fluid-grid").appendTo(grid);
+                    var bootstrapBrand = getBootstrapBrand(attr);
+                    ngModel.$viewChangeListeners.push(function () {
+
+                    });
+
+                    ngModel.$render = function () {
+                        if (!ngModel.$viewValue) {
+                            ngModel.$setViewValue([]);
+                            t(function () {
+                                scope.$apply();
+                            })
+                        }
+                    }
+
+                    if (!scope[attr.ngModel]) {
+                        scope[attr.ngModel] = [];
+                        t(function () {
+                            scope.$apply();
+                        })
+                    }
+
+                    if (!loaded) {
+
+                        if (attr.lookupTemplate) {
+                            grid.attr("lookup-template", attr.lookupTemplate);
+                        }
+                        if (attr.validate) {
+                            validate = attr.validate;
+                        }
+
+                        for (var index = 0; index < transclude.children().length; index++) {
+                            var subColumn = $(transclude.children()[index]);
+                            if (subColumn.is("fluid-subcolumn")) {
+                                var column = JSON.parse(subColumn.attr("column"));
+                                $("<div>").html("{{gridItem." + column.name + "}}").appendTo(gridContainer);
+                                columns.push(column);
                             }
+                        }
+
+                        if (attr.sourceUrl || attr.factory) {
+                            grid.appendTo(fluidLookupButton);
+                            c(fluidLookupButton)(scope);
                         } else {
-                            scope.hideModal();
+                            fluidLookupButton.addClass("hidden");
                         }
+
+                        console.debug("fluidSubtable.columns", columns);
+                        var modal = getSubTableModal(attr.label);
+                        modal.$modal.attr(bootstrapBrand, "");
+                        setTable(element, attr.keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
+                        transclude.remove();
                     }
 
-                };
-
-                scope.hideModal = function () {
-                    modal.modal("hide");
-                };
-
-                scope.showModal = function (action, item, $index) {
-                    modal.modal("show");
-                    if (action === "create") {
-                        scope.action = "Create";
-                    } else if (action === "edit") {
-                        scope.action = "Edit";
-                        scope.index = $index;
-                        scope.temp = {};
-                        angular.copy(scope.model[scope.index], scope.temp);
-                        scope[attr.keyVar] = scope.temp;
-                    }
-
-                };
-
-                scope.change = function (item, full, $index, $event) {
-                    console.debug("fluidSubtable.event", $event);
-                    if (item === "Create") {
-                        scope.action = item;
-                        scope.selectValue = undefined;
-                        modal.modal("show");
-                    } else if (item === "Search") {
-                        lookUp.open({
-                            method: scope.method,
-                            sourceUrl: scope.sourceUrl,
-                            event: $event,
-                            label: attr.label
-                        });
-                    }
-                };
-
-                scope.select = function (item) {
-                    scope.selectedItem = item;
                 }
-
-                scope.selectLookUp = function (item, $event) {
-                    if (scope.validate) {
-                        if (scope.validate({value: item})) {
-                            scope.model.push(item);
-                        }
-                    } else {
-                        scope.model.push(item);
-                    }
-                }
-
-
-                scope.delete = function () {
-                    scope.model.splice(scope.index, 1);
-                    scope.hideModal();
-                };
-
-
-                var transclude = element.find("ng-transclude");
-
-                var grid = $("<fluid-lookup-grid>").attr("key-var", attr.keyVar);
-                var gridContainer = $("<div>").addClass("fluid-grid").appendTo(grid);
-                if (attr.lookupTemplate) {
-                    grid.attr("lookup-template", attr.lookupTemplate);
-                }
-
-                transclude.find("fluid-subcolumn").each(function () {
-                    var column = JSON.parse($(this).attr("column"));
-                    $("<div>").html("{{item." + column.name + "}}").appendTo(gridContainer);
-                    scope.columns.push(column);
-                });
-
-                console.debug("subTable.sourceUrl", scope.sourceUrl);
-                console.debug("subTable.factory", scope.factory);
-                var fluidLookup = element.find("button[fluid-lookup]");
-
-                if (scope.sourceUrl || scope.factory) {
-                    grid.appendTo(fluidLookup);
-                    c(fluidLookup)(scope);
-                } else {
-                    fluidLookup.addClass("hidden");
-                }
-
-                setTable(element, attr.keyVar, c, scope, modal);
-                transclude.remove();
 
             }
         }
@@ -172,11 +126,10 @@ angular.module("fluid.webComponents.fluidSubTable", [])
             template: "<div ng-transclude></div>",
             link: {
                 pre: function (scope, element, attr, controller, transcludeFn) {
-
+                    console.debug("fluidSubcolumn.pre.element", element[0]);
                 },
                 post: function (scope, element, attr) {
-
-                    var column = {};
+                    var column = {filter: true};
                     if (attr.name) {
                         column.name = attr.name;
                     } else {
@@ -187,21 +140,24 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         column.header = attr.header;
                     }
 
+                    if (attr.filter) {
+                        column.filter = scope.$eval(attr.filter);
+                    }
+
+                    if (attr.toggleColumns) {
+                        column.toggleColumns = scope.$eval(attr.toggleColumns);
+                    }
+
                     if (attr.value) {
                         column.value = attr.value;
                     }
-
-                    var transclude = element.find("[ng-transclude]");
-
+                    var transclude = element.find("[ng-transclude]").first();
                     column.row = transclude.find(".column-row").html();
-
                     var form = transclude.find(".column-form").html();
-
                     column.form = form;
-
                     console.debug("fluidSubcolumn.column", column);
-
                     element.attr("column", JSON.stringify(column));
+                    transclude.remove();
                 }
             },
             transclude: true
@@ -209,49 +165,200 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
     }]);
 
-function setTable(element, keyVar, compile, scope, modal) {
+function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeout, columns, validate, $filter) {
+
+
+    var createButton = element.find("button.create");
+    var eraseButton = element.find("button.delete");
+
+    var mode = {
+        create: function () {
+            modal.actionButton.addClass("action-create");
+            modal.actionButton.removeClass("action-edit");
+            modal.deleteButton.addClass("hidden");
+        },
+        edit: function () {
+            modal.actionButton.removeClass("action-create");
+            modal.actionButton.addClass("action-edit");
+            modal.deleteButton.removeClass("hidden");
+
+        }
+    };
+
+    createButton.unbind("click");
+    createButton.click(function () {
+        modal.$modal.modal("show");
+        modal.actionButton.text("Create");
+        mode.create();
+        scope[keyVar] = {};
+        timeout(function () {
+            scope.$apply();
+        });
+    });
+
+    eraseButton.unbind("click");
+    eraseButton.click(function () {
+        ngModel.$setViewValue([]);
+        timeout(function () {
+            scope.$apply();
+        });
+    });
+
+
+    modal.cancelButton.unbind("click");
+    modal.cancelButton.click(function () {
+        modal.$modal.modal("hide");
+    });
+
+    modal.actionButton.unbind("click");
+    modal.actionButton.click(function () {
+        if (modal.actionButton.hasClass("action-create")) {
+            if (scope[keyVar]) {
+                if (scope.$eval(validate))
+                    if (!ngModel.$viewValue) ngModel.$setViewValue([]);
+                ngModel.$viewValue.push(scope[keyVar]);
+                modal.$modal.modal("hide");
+            }
+        }
+        else if (modal.actionButton.hasClass("action-edit")) {
+            if (scope[keyVar]) {
+                var $index = modal.actionButton.attr("index");
+                if (scope.$eval(validate)) {
+                    ngModel.$viewValue[$index] = scope[keyVar];
+                    modal.$modal.modal("hide");
+                }
+            }
+        }
+    });
+
+    modal.deleteButton.unbind("click");
+    modal.deleteButton.click(function () {
+        var $index = modal.deleteButton.attr("index");
+        if (ngModel.$viewValue) {
+            ngModel.$viewValue.splice($index, 1);
+            timeout(function () {
+                scope.$apply();
+            });
+        }
+        modal.$modal.modal("hide");
+        console.debug("$index", $index);
+    });
 
     var table = element.find("table");
-    var tr = $("<tr>").attr("ng-repeat", keyVar + " in model track by $index");
-    tr.attr("ng-click", "showModal('edit'," + keyVar + ",$index)");
-    for (var i = 0; i < scope.columns.length; i++) {
-        var col = scope.columns[i];
+    table.addClass(keyVar);
+    var thead = table.find("thead");
+    var tr = $("<tr>").attr("ng-repeat", keyVar + " in " + value + " track by $index");
+
+    element.find("table." + keyVar).delegate("tr", "click", function ($event) {
+        console.debug("fluidSubtable.tr", $(this));
+        var eventScope = angular.element($event.target).scope();
+        console.debug("fluidSubtable.eventScope.edit", eventScope);
+        modal.$modal.modal("show");
+        modal.actionButton.text("Update");
+        modal.actionButton.attr("index", eventScope.$index);
+        modal.deleteButton.attr("index", eventScope.$index);
+        mode.edit();
+        var copy = {};
+        angular.copy(ngModel.$viewValue[eventScope.$index], copy)
+        scope[keyVar] = copy;
+        timeout(function () {
+            scope.$apply();
+        });
+    });
+
+
+    thead.delegate("th", "click", function () {
+        var sorter = $(this).find("a.sort");
+        var sort = sorter.attr("sort");
+        console.debug("fluid-subtable.sorted", sort);
+
+        if (sort === undefined) {
+            sorter.toggleClass("fa fa-sort-desc");
+            sorter.attr("sort", "asc");
+            sort = "asc";
+        } else if (sort === "asc") {
+            sorter.toggleClass("fa fa-sort-asc");
+            sorter.toggleClass("fa fa-sort-desc");
+            sorter.attr("sort", "desc");
+            sort = "desc";
+        } else if (sort === "desc") {
+            sorter.removeClass("fa fa-sort-desc");
+            sorter.removeClass("fa fa-sort-asc");
+            sorter.removeAttr("sort");
+            sort = undefined;
+        }
+
+        var name = $(this).attr("field-name");
+
+        console.debug("fluid-subtable.sort", name);
+
+        var sorted = undefined;
+        if (sort === "asc") {
+            sorted = false;
+        } else if (sort === "desc") {
+            sorted = true;
+        }
+        console.debug("fluid-subtable.sorted", sorted);
+        var sortedArray = $filter("orderBy")(ngModel.$viewValue, name, sorted);
+
+        ngModel.$setViewValue(sortedArray);
+
+        timeout(function () {
+            scope.$apply();
+        });
+
+
+    });
+
+    for (var i = 0; i < columns.length; i++) {
+        var col = columns[i];
         var td = $("<td>");
-        console.debug("subColumn.createdTd.col.row", col.row);
         if (/<[a-z][\s\S]*>/i.test(col.row)) {
             $(col.row).appendTo(td);
         } else {
             td.html(col.row);
         }
+        var th = $("<th>").html(col.header).appendTo(thead);
+        th.attr("field-name", col.name);
+        $("<a href='#'>").appendTo(th).addClass("sort");
         td.appendTo(tr);
+        $(col.form).appendTo(modal.body);
+        console.debug("subColumn.col.form", col.form);
         console.debug("subColumn.createdTd", td);
+
     }
+
     tr.appendTo(table);
     compile(table)(scope);
-
-    var form = modal.find(".modal-content");
-
-    form.attr("ng-submit", "save(action," + keyVar + ")");
-    modal.on("hidden.bs.modal", function (e) {
-        scope.action = undefined;
+    timeout(function () {
+        scope.$apply();
     });
-
-    var modalBody = modal.find(".modal-body");
-    for (var i = 0; i < scope.columns.length; i++) {
-        var col = scope.columns[i];
-        $(col.form).appendTo(modalBody);
-    }
-    compile(modal.contents())(scope);
+    console.debug("fluid-subtable.modal.contents", modal.$modal[0]);
+    compile(modal.$modal.contents())(scope);
+    element.attr("table-loaded", true);
 }
 
-function getSubTableModal() {
-    return $("<div class='modal fade fluid-subtable-form' tabindex='-1' role='dialog'>" +
-        "<div class='modal-dialog'>" +
-        "<form class='modal-content' role='form'>" +
-        "<div class='modal-header'>" +
-        "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button> " +
-        "<h4 class='modal-title'>{{label}}</h4> </div> <div class='modal-body'> </div> " +
-        "<div class='modal-footer'> <div ng-switch='action'> <button type='submit' class='btn btn-info btn-lg create'>{{action == 'Edit' ? 'Update' :action }} </button> " +
-        "<button ng-if=\"action=='Edit'\" type='button' class='btn btn-danger btn-lg' ng-click='delete()'>Delete </button> " +
-        "<button type='button' class='btn btn-danger btn-lg' ng-click='hideModal()'>Cancel</button> </div> </div> </form> </div> </div>");
+function getSubTableModal(label) {
+
+    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog'>");
+    var $dialog = $("<div class='modal-dialog'>").appendTo($modal);
+    var $modalContent = $("<form class='modal-content' role='form'>").appendTo($dialog);
+    var $modalHeader = $("<div class='modal-header'>").appendTo($modalContent);
+    $("<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>").appendTo($modalHeader);
+    $("<h4 class='modal-title'><b>" + label + "</b></h4>").appendTo($modalHeader);
+    var $modalBody = $("<div class='modal-body container-fluid'>").appendTo($modalContent);
+    var $modalFooter = $("<div class='modal-footer'>").appendTo($modalContent);
+    var $actionButton = $("<button type='submit' info class='btn btn-lg'>").appendTo($modalFooter);
+    var $deleteButton = $("<button type='button' danger class='btn btn-lg'>").html("Delete").appendTo($modalFooter);
+    var $cancelButton = $("<button type='button' danger class='btn btn-lg'>").html("Cancel").appendTo($modalFooter);
+
+    return {
+        $modal: $modal,
+        content: $modalContent,
+        body: $modalBody,
+        actionButton: $actionButton,
+        cancelButton: $cancelButton,
+        deleteButton: $deleteButton
+    }
+
 }

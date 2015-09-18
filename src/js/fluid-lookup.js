@@ -5,16 +5,21 @@ angular.module("fluid.webComponents.fluidLookup", [])
     .directive("fluidLookup", ["$http", "lookUp", function (h, lookUp) {
         return {
             restrict: "A",
-            link: function (scope, element, attr) {
+            link: function (scope, element, attr, ngModel) {
                 var method = "get";
                 if (attr.method) {
                     method = attr.method;
                 }
+                console.debug("fluid-lookup.ngModel", ngModel);
                 element.unbind("click");
 
+                var bootstrapBrand = getBootstrapBrand(attr);
+                console.debug("fluidLookup.bootstrapBrand.before", bootstrapBrand);
                 element.bind("click", function (e) {
                     lookUp.open({
+                        bootstrapBrand: bootstrapBrand,
                         event: e,
+                        ngModel: attr.ngModel,
                         method: method,
                         values: attr.values,
                         sourceUrl: attr.sourceUrl,
@@ -30,6 +35,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
     .directive("fluidLookupGrid", ["$templateCache", function (tc) {
         var fluidLookUpGrid = {
             restrict: "AE",
+            terminal: true,
             link: function (scope, element, attr) {
                 element.addClass("grid");
                 var grid = {};
@@ -52,6 +58,32 @@ angular.module("fluid.webComponents.fluidLookup", [])
 
         };
         return fluidLookUpGrid;
+    }]).directive("fluidLookupTable", ["$templateCache", function (tc) {
+        var fluidLookUpGrid = {
+            terminal: true,
+            restrict: "AE",
+            link: function (scope, element, attr) {
+                element.addClass("table");
+                var table = {};
+
+                if (!attr.keyVar) {
+                    throw "KeyVar attribute is required.";
+                }
+
+                if (attr.lookupTemplate) {
+                    table.html = tc.get(attr.lookupTemplate);
+                } else {
+                    table.html = element.html();
+                }
+
+                table.keyVar = attr.keyVar;
+                element.parent().attr("lookup-type", "table");
+                element.parent().attr("table", JSON.stringify(table));
+                element.remove();
+            }
+
+        };
+        return fluidLookUpGrid;
     }])
     .service("lookUp", ["$compile", "$http", "$injector", "$timeout", function (c, h, inj, t) {
 
@@ -61,32 +93,74 @@ angular.module("fluid.webComponents.fluidLookup", [])
             var method = options.method;
             var sourceUrl = options.sourceUrl;
             var factory = options.factory;
-
             var scope = angular.element($(event.currentTarget)).scope();
 
-            scope.label = options.label;
-
+            var label = options.label;
+            var bootstrapBrand = options.bootstrapBrand;
             var source = $(event.currentTarget);
-            var modal = getModal();
+            var modal = getModal(label).attr(bootstrapBrand, "");
             var loader = getLookupLoader();
             var oldHtml = $(event.currentTarget).html();
-
+            var keyVar = "";
             var modalBody = modal.find(".modal-body");
-            modalBody.addClass("fluid-lookup");
-
+            var ngModel = options.ngModel;
+            console.debug("fluidLookup.bootstrapBrand", bootstrapBrand);
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
-                var selectorGrid = $("<div>").addClass("grid").attr("ng-repeat", grid.keyVar + " in data").appendTo(modalBody);
+                keyVar = grid.keyVar;
+                var selectorGrid = $("<div>").attr(options.bootstrapBrand, "").addClass("grid").attr("ng-repeat", grid.keyVar + " in " + grid.keyVar + "_data").appendTo(modalBody);
                 selectorGrid.html(grid.html);
+                modalBody.delegate("div.grid", "click", function ($event) {
+                    if (ngModel) {
+                        console.debug("fluid-lookup.ngModel", ngModel);
+                        var indexScope = angular.element($event.target).scope();
+                        var item = indexScope[grid.keyVar];
+                        console.debug("fluid-lookup.selectedItem", item);
+                        scope[ngModel] = item;
+                        t(function () {
+                            scope.$apply();
+                        })
+                    }
+                    modal.modal("hide");
+                });
                 if (source.attr("on-lookup")) {
+                    selectorGrid.unbind("click");
                     selectorGrid.attr("ng-click", source.attr("on-lookup"));
                 }
-            } else {
-                //TODO: table
+            } else if (source.attr("lookup-type") === "table") {
+                var table = JSON.parse(source.attr("table"));
+                keyVar = table.keyVar;
+                var tableBd = $("<table class='modal-body table lookup-table table-hover table-striped table-condensed'>").attr(options.bootstrapBrand, "").appendTo(modalBody);
+                tableBd.delegate("tr", "click", function ($event) {
+                    if (ngModel) {
+                        console.debug("fluid-lookup.ngModel", ngModel);
+                        var indexScope = angular.element($event.target).scope();
+                        var item = indexScope[table.keyVar];
+                        console.debug("fluid-lookup.selectedItem", item);
+                        scope[ngModel] = item;
+                        t(function () {
+                            scope.$apply();
+                        })
+                    }
+                    modal.modal("hide");
+                });
+                var thead = $("<thead>").appendTo(tableBd);
+                var tr = $("<tr>").attr("ng-repeat", table.keyVar + " in " + table.keyVar + "_data").appendTo(tableBd);
+                $(table.html).each(function () {
+                    var col = $(this)
+                    if (col.hasClass("column-row")) {
+                        var header = col.attr("header");
+                        $("<th>").html(header).appendTo(thead);
+                        $("<td>").html(col.html()).appendTo(tr);
+                    }
+                    console.debug("fluid-select.table.col", col);
+                });
+                modalBody.replaceWith(tableBd);
             }
 
             console.debug("lookupFactory.modalBody", modalBody.html());
-            c(modal)(scope);
+            c(modal.contents())(scope);
+
             if (sourceUrl) {
                 $(event.currentTarget).html(loader);
                 h({
@@ -94,12 +168,18 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     url: sourceUrl
                 }).success(function (data) {
                     $(event.currentTarget).html(oldHtml);
-                    scope.data = data;
+                    scope[keyVar + "_data"] = data;
+                    t(function () {
+                        scope.$apply();
+                    });
                     modal.modal("show");
                 });
             } else if (factory) {
                 t(function () {
-                    scope.data = inj.get(factory);
+                    scope[keyVar + "_data"] = inj.get(factory);
+                    t(function () {
+                        scope.$apply();
+                    });
                     console.debug("lookupFactory", scope.data);
                     console.debug("lookupFactory.html", modal.html());
                     modal.modal("show");
@@ -116,11 +196,11 @@ function getLookupLoader() {
     return $("<i>").addClass("fa fa-spinner fa-spin");
 }
 
-function getModal() {
-    var modal = $("<div tabindex='-1' role='dialog'>").addClass("modal fade");
+function getModal(label) {
+    var modal = $("<div tabindex='-1' role='dialog'>").addClass("modal fade fluid-lookup");
     var dialog = $("<div>").addClass("modal-dialog");
     var content = $("<div>").addClass("modal-content");
-    var modalHeader = $("<div>").addClass("modal-header bg-primary");
+    var modalHeader = $("<div>").addClass("modal-header");
     var modalBody = $("<div>").addClass("modal-body");
     var closeButton = $("<button type='button' class='close' data-dismiss='modal' aria-label='Close'>");
     closeButton.html("<span aria-hidden='true'>&times;</span>");
@@ -129,7 +209,7 @@ function getModal() {
     modalHeader.appendTo(content);
     modalBody.appendTo(content);
     closeButton.appendTo(modalHeader);
-    $("<h4>").addClass("modal-title").html("{{label}}").appendTo(modalHeader);
+    $("<h4>").addClass("modal-title").html("<b>" + label + "</b>").appendTo(modalHeader);
 
     return modal;
 }

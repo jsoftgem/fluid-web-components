@@ -1,4 +1,5 @@
 @import "../variables";
+@import "../mixin";
 
 .fluid-lookup {
   color: $text-color;
@@ -34,4 +35,71 @@
 
 .fluid-lookup .column {
 
+}
+
+.fluid-lookup table.lookup-table {
+
+}
+
+.fluid-lookup table.lookup-table th {
+  text-align: center;
+  border: $table-header-border;
+}
+
+.fluid-lookup table.lookup-table tr {
+  text-align: center;
+}
+
+.fluid-lookup table.lookup-table tr:hover {
+  cursor: $cursor-pointer;
+}
+
+.fluid-lookup table[primary].lookup-table th {
+  @extend .table-header;
+  border-color: $brand-primary;
+}
+
+.fluid-lookup table[info].lookup-table th {
+  @extend .table-header;
+  border-color: $brand-info;
+}
+
+.fluid-lookup table[danger].lookup-table th {
+  @extend .table-header;
+  border-color: $brand-danger;
+}
+
+.fluid-lookup table[warning].lookup-table th {
+  @extend .table-header;
+  border-color: $brand-warning;
+}
+
+.fluid-lookup table[success].lookup-table th {
+  @extend .table-header;
+  border-color: $brand-success;
+}
+
+.fluid-lookup.modal[primary] .modal-header {
+  color: $text-active;
+  background: $brand-primary;
+}
+
+.fluid-lookup.modal[info] .modal-header {
+  color: $text-active;
+  background: $brand-info;
+}
+
+.fluid-lookup.modal[danger] .modal-header {
+  color: $text-active;
+  background: $brand-danger;
+}
+
+.fluid-lookup.modal[success] .modal-header {
+  color: $text-active;
+  background: $brand-success;
+}
+
+.fluid-lookup.modal[warning] .modal-header {
+  color: $text-active;
+  background: $brand-warning;
 }

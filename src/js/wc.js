@@ -34,10 +34,25 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         }
     }])
     .controller("sampleCtrl", ["$scope", function (scope) {
+        scope.year = 1957;
+        scope.sample = "rer";
         scope.change = function (item) {
             console.debug("sampleCtrl.change", item);
         }
+        scope.onLookUp = function (item, $event) {
+            scope.selectedSample = item;
+            console.debug("wc.onLookUp", $event)
+        }
     }])
     .factory("samples", function () {
-        return [{"name": "rer", "label": "wer"}, {"name": "3", "label": "w"}]
+
+        return [{
+            "name": "Jerico",
+            year: 1991,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "Pogi",
+            year: 1991,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }];
     });
