@@ -1,4 +1,8 @@
+'use strict';
+
+
 /**
+ * TODO: fluid-cache creates an interceptor to cache ng-model using an AngularJS directive.
  * Created by rickzx98 on 9/5/15.
  */
 angular.module("fluid.webComponents.fluidCache", [])

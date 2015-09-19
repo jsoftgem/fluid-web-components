@@ -41,6 +41,9 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
                         var bootstrapBrand = getBootstrapBrand(attr);
                         fluidLookupButton.attr("ng-model", keyVar + "_lookup").attr(bootstrapBrand, "");
+                        fluidLookupButton.attr("title", "Look " + (attr.label ? "for " + attr.label : "up"));
+
+
                         scope[keyVar + "_lookup"] = undefined;
                         t(function () {
                             scope.$apply();
@@ -76,12 +79,26 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         }
 
 
-                        if (attr.removeAll) {
-                            var removeAll = scope.$eval(attr.removeAll);
-                            if (removeAll !== undefined && removeAll === false) {
+                        if (attr.showClear) {
+                            var showClear = scope.$eval(attr.showClear);
+                            if (showClear !== undefined && showClear === false) {
                                 var eraseButton = element.find("button.delete");
                                 eraseButton.remove();
                             }
+                        } else {
+                            var eraseButton = element.find("button.delete");
+                            eraseButton.attr("title", "Clear " + (attr.label ? attr.label : ""));
+                        }
+
+                        if (attr.showAdd) {
+                            var showAdd = scope.$eval(attr.showAdd);
+                            if (showAdd !== undefined && showAdd === false) {
+                                var createButton = element.find("button.create");
+                                createButton.remove();
+                            }
+                        } else {
+                            var createButton = element.find("button.create");
+                            createButton.attr("title", "add " + (attr.label ? attr.label : ""));
                         }
 
                         for (var index = 0; index < transclude.children().length; index++) {
@@ -117,10 +134,9 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
         return {
             restrict: "AE",
-            template: "<div ng-transclude></div>",
+            terminal: true,
             link: {
                 pre: function (scope, element, attr, controller, transcludeFn) {
-                    console.debug("fluidSubcolumn.pre.element", element[0]);
                 },
                 post: function (scope, element, attr) {
                     var column = {filter: true};
@@ -145,16 +161,21 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     if (attr.value) {
                         column.value = attr.value;
                     }
-                    var transclude = element.find("[ng-transclude]").first();
-                    column.row = transclude.find(".column-row").html();
-                    var form = transclude.find(".column-form").html();
+
+
+                    if (attr.sort) {
+                        column.sort = scope.$eval(attr.sort);
+                    }
+
+                    console.debug("fluidSubcolumn.element", element[0]);
+                    column.row = element.find(".column-row").html();
+                    var form = element.find(".column-form").html();
                     column.form = form;
                     console.debug("fluidSubcolumn.column", column);
                     element.attr("column", JSON.stringify(column));
-                    transclude.remove();
+                    element.html("");
                 }
-            },
-            transclude: true
+            }
         }
 
     }]);
@@ -323,8 +344,8 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     });
 
 
-    thead.delegate("th", "click", function () {
-        var sorter = $(this).find("a.fluid-sort");
+    thead.delegate("th.fluid-sort", "click", function () {
+        var sorter = $(this).find("a");
         sort = sorter.attr("sort");
         fieldSorted = $(this).attr("field-name");
         var sorting = thead.attr("sorting");
@@ -365,13 +386,13 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         console.debug("fluid-subtable.sorted", sorted);
 
-        var sortedArray = undefined;
+        var sortedArray = [];
 
         if (sorted !== undefined) {
             sortedArray = $filter("orderBy")(ngModel.$viewValue, fieldSorted, sorted);
             sortedArray.sort = sort;
         } else {
-            sortedArray = scope[modeloc];
+            angular.copy(scope[modeloc], sortedArray);
             console.debug("fluid-subtable.sortedArray_oc", sortedArray);
         }
 
@@ -394,7 +415,10 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         var th = $("<th>").html(col.header).appendTo(thead);
         th.attr("field-name", col.name);
-        $("<a href='#'>").appendTo(th).addClass("fluid-sort");
+        if (col.sort !== false) {
+            th.addClass("fluid-sort");
+        }
+        $("<a href='#'>").appendTo(th);
         td.appendTo(tr);
         $(col.form).appendTo(modal.body);
         console.debug("subColumn.col.form", col.form);

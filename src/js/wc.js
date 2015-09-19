@@ -1,7 +1,7 @@
 /**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "ngResource", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -68,26 +68,44 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         return [{
             "name": "Jerico",
             year: 1991,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Pogi",
             year: 1991,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "John Doe",
             year: 1978,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "James Hitler",
             year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Anita",
             year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Calcium Kid",
             year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
         }];
     });

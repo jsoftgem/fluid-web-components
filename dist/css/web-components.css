@@ -85,27 +85,27 @@ fluid-subtable[success] table th {
   cursor: pointer;
 }
 
-.fluid-subtable table th .fluid-sort {
+.fluid-subtable table th.fluid-sort a {
   float: right;
 }
 
-fluid-subtable[primary] table a.fluid-sort {
+fluid-subtable[primary] table .fluid-sort a {
   color: #337ab7;
 }
 
-fluid-subtable[info] table th a.fluid-sort {
+fluid-subtable[info] table th.fluid-sort a {
   color: #5bc0de;
 }
 
-fluid-subtable[warning] table th a.fluid-sort {
+fluid-subtable[warning] table th.fluid-sort a {
   color: #f0ad4e;
 }
 
-fluid-subtable[success] table th a.fluid-sort {
+fluid-subtable[success] table th.fluid-sort a {
   color: #5cb85c;
 }
 
-fluid-subtable[danger] table th a.fluid-sort {
+fluid-subtable[danger] table th.fluid-sort a {
   color: #d9534f;
 }
 
