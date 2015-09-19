@@ -11,7 +11,8 @@
 <body ng-controller="sampleCtrl as sample">
 <div class="container" style="margin-top:50px">
     <div class="form-group">
-        <fluid-subtable remove-all="false" success key-var="vd" label="SubTable" ng-model="labelList" factory="samples">
+        <fluid-subtable remove-all="false" success key-var="vd" label="SubTable" ng-model="labelList" factory="samples"
+                        lookup-template="subtable.template">
             <fluid-subcolumn name="name" header="Name">
                 <div class="column-row">
                     {{vd.name}}
@@ -38,12 +39,14 @@
                 </div>
             </fluid-subcolumn>
             <fluid-subcolumn name="list" header="List">
-                <div class="column-row">
-                    {{vd.list}}
-                </div>
+                <fluid-subcomponent tag="div" class="column-row">
+                    <div ng-repeat="it in vd.list">
+                        {{it.name}}
+                    </div>
+                </fluid-subcomponent>
                 <div class="column-form">
                     <fluid-subcomponent tag="fluid-subtable" primary key-var="subVd" label="VD List" ng-model="vd.list"
-                                        factory="samples">
+                                        factory="samples" lookup-template="subtable.template">
                         <fluid-subcolumn tag="fluid-subcolumn" name="name" header="Name">
                             <div class="column-row">
                                 {{subVd.name}}
@@ -77,7 +80,7 @@
                                 <div class="form-group">
                                     <fluid-subcomponent tag="fluid-subtable" primary key-var="subVda" label="VD List"
                                                         ng-model="subVd.alist"
-                                                        factory="samples">
+                                                        factory="samples" lookup-template="subtable.template">
                                         <fluid-subcolumn tag="fluid-subcolumn" name="year" header="Year">
                                             <div class="column-row">
                                                 {{subVda.year}}
@@ -128,6 +131,17 @@
         {{selectedSample}}
     </div>
 </div>
+<script id="subtable.template" type="text/ng-template">
+    <div style="min-height: 100px;width:185px">
+        <div>{{gridItem.name}}</div>
+        <div>{{gridItem.year}}</div>
+        <div ng-repeat="lis in gridItem.list ">
+            {{lis.name}}
+        </div>
+
+    </div>
+
+</script>
 <script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
 <script src="bower_components/angular/angular.js" type="text/javascript"></script>

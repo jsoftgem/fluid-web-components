@@ -68,26 +68,26 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         return [{
             "name": "Jerico",
             year: 1991,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Pogi",
             year: 1991,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "John Doe",
             year: 1978,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "James Hitler",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Anita",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Calcium Kid",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }];
     });

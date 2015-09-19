@@ -305,11 +305,10 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     var thead = table.find("thead");
     var tr = $("<tr>").attr("ng-repeat", keyVar + " in " + value + " track by $index");
 
-    element.find("table." + keyVar).delegate("tr", "click", function ($event) {
+    element.find("table." + keyVar).delegate("tr td", "click", function ($event) {
         console.debug("fluidSubtable.tr", $(this));
         var eventScope = angular.element($event.target).scope();
         console.debug("fluidSubtable.eventScope.edit", eventScope);
-        modal.$modal.modal("show");
         modal.actionButton.text("Update");
         modal.actionButton.attr("index", eventScope.$index);
         modal.deleteButton.attr("index", eventScope.$index);
@@ -320,6 +319,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         timeout(function () {
             scope.$apply();
         });
+        modal.$modal.modal("show");
     });
 
 

@@ -778,11 +778,10 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     var thead = table.find("thead");
     var tr = $("<tr>").attr("ng-repeat", keyVar + " in " + value + " track by $index");
 
-    element.find("table." + keyVar).delegate("tr", "click", function ($event) {
+    element.find("table." + keyVar).delegate("tr td", "click", function ($event) {
         0;
         var eventScope = angular.element($event.target).scope();
         0;
-        modal.$modal.modal("show");
         modal.actionButton.text("Update");
         modal.actionButton.attr("index", eventScope.$index);
         modal.deleteButton.attr("index", eventScope.$index);
@@ -793,6 +792,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         timeout(function () {
             scope.$apply();
         });
+        modal.$modal.modal("show");
     });
 
 
@@ -1133,27 +1133,27 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         return [{
             "name": "Jerico",
             year: 1991,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Pogi",
             year: 1991,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "John Doe",
             year: 1978,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "James Hitler",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Anita",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }, {
             "name": "Calcium Kid",
             year: 1998,
-            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+            list: [{"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}, {"name": "Someone Else", "year": "1976"}]
         }];
     });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
 
