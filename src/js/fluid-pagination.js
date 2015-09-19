@@ -42,5 +42,13 @@ angular.module("fluid.webComponents.fluidPagination", [])
 
         return fluidPagination;
 
+    }])
+    .factory("Paginator", ["$resource", function (r) {
+        var paginator = function (url) {
+            return r(url);
+        }
+
+
+        return paginator;
     }]);
 
