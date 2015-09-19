@@ -44,6 +44,25 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
             console.debug("wc.onLookUp", $event)
         }
     }])
+    .service("fluidClient", [function () {
+
+        this.getKeyVar = function (keyVar) {
+            if (!this.keyVars) {
+                this.keyVars = [];
+            }
+            if (this.keyVars[keyVar] != null) {
+                var keys = this.keyVars[keyVar];
+                keys++;
+                this.keyVars[keyVar] = keys;
+                return keyVar + "_" + keys;
+            } else {
+                this.keyVars[keyVar] = 0;
+                return keyVar;
+            }
+        };
+
+        return this;
+    }])
     .factory("samples", function () {
 
         return [{
@@ -53,6 +72,22 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         }, {
             "name": "Pogi",
             year: 1991,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "John Doe",
+            year: 1978,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "James Hitler",
+            year: 1998,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "Anita",
+            year: 1998,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "Calcium Kid",
+            year: 1998,
             list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
         }];
     });

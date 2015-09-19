@@ -124,8 +124,8 @@ module.exports = function (grunt) {
             },
             strip: {
                 main: {
-                    src: 'dist/js/rex.js',
-                    dest: 'dist/js/rex.js',
+                    src: 'dist/js/web-components.js',
+                    dest: 'dist/js/web-components.js',
                     nodes: ['console', 'debug', 'info', 'log']
                 }
             },

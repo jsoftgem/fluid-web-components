@@ -22,6 +22,7 @@
 
 .fluid-subtable table th {
   @extend .table-header;
+  @extend .disable_text_highlighting;
   border: $table-header-border;
   cursor: $cursor-pointer;
 }
@@ -56,27 +57,27 @@ fluid-subtable[success] table th {
   cursor: $cursor-pointer;
 }
 
-.fluid-subtable table th .sort {
+.fluid-subtable table th .fluid-sort {
   float: right;
 }
 
-fluid-subtable[primary] table a.sort {
+fluid-subtable[primary] table a.fluid-sort {
   color: $brand-primary;
 }
 
-fluid-subtable[info] table th a.sort {
+fluid-subtable[info] table th a.fluid-sort {
   color: $brand-info;
 }
 
-fluid-subtable[warning] table th a.sort {
+fluid-subtable[warning] table th a.fluid-sort {
   color: $brand-warning;
 }
 
-fluid-subtable[success] table th a.sort {
+fluid-subtable[success] table th a.fluid-sort {
   color: $brand-success;
 }
 
-fluid-subtable[danger] table th a.sort {
+fluid-subtable[danger] table th a.fluid-sort {
   color: $brand-danger;
 }
 

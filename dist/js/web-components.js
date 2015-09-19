@@ -8,8 +8,8 @@ angular.module("fluid.webComponents.fluidCache", [])
         };
         this.putCache = function (key, data) {
             tc.put(key, data);
-            console.debug("fluidCache.service.put.key", key);
-            console.debug("fluidCache.service.put.data", data);
+            0;
+            0;
         };
         return this;
     }])
@@ -17,7 +17,7 @@ angular.module("fluid.webComponents.fluidCache", [])
 
         return {
             "response": function (response) {
-                console.debug("fluidCache.injector.response", response);
+                0;
                 if (fs.getCache(response.config.url) === false) {
                     fs.putCache(response.config.url, response.data);
                 }
@@ -32,7 +32,7 @@ angular.module("fluid.webComponents.fluidCache", [])
 
                 element.ready(function () {
                     var obj = scope.$$childHead.$eval(attr.fluidCache);
-                    console.debug("fluidCache.cache", obj);
+                    0;
                     if (obj) {
                         fs.putCache(obj, false);
                     }
@@ -53,11 +53,11 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 if (attr.method) {
                     method = attr.method;
                 }
-                console.debug("fluid-lookup.ngModel", ngModel);
+                0;
                 element.unbind("click");
 
                 var bootstrapBrand = getBootstrapBrand(attr);
-                console.debug("fluidLookup.bootstrapBrand.before", bootstrapBrand);
+                0;
                 element.bind("click", function (e) {
                     lookUp.open({
                         bootstrapBrand: bootstrapBrand,
@@ -147,7 +147,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
             var keyVar = "";
             var modalBody = modal.find(".modal-body");
             var ngModel = options.ngModel;
-            console.debug("fluidLookup.bootstrapBrand", bootstrapBrand);
+            0;
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
                 keyVar = grid.keyVar;
@@ -155,10 +155,10 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 selectorGrid.html(grid.html);
                 modalBody.delegate("div.grid", "click", function ($event) {
                     if (ngModel) {
-                        console.debug("fluid-lookup.ngModel", ngModel);
+                        0;
                         var indexScope = angular.element($event.target).scope();
                         var item = indexScope[grid.keyVar];
-                        console.debug("fluid-lookup.selectedItem", item);
+                        0;
                         scope[ngModel] = item;
                         t(function () {
                             scope.$apply();
@@ -176,10 +176,10 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 var tableBd = $("<table class='modal-body table lookup-table table-hover table-striped table-condensed'>").attr(options.bootstrapBrand, "").appendTo(modalBody);
                 tableBd.delegate("tr", "click", function ($event) {
                     if (ngModel) {
-                        console.debug("fluid-lookup.ngModel", ngModel);
+                        0;
                         var indexScope = angular.element($event.target).scope();
                         var item = indexScope[table.keyVar];
-                        console.debug("fluid-lookup.selectedItem", item);
+                        0;
                         scope[ngModel] = item;
                         t(function () {
                             scope.$apply();
@@ -196,12 +196,12 @@ angular.module("fluid.webComponents.fluidLookup", [])
                         $("<th>").html(header).appendTo(thead);
                         $("<td>").html(col.html()).appendTo(tr);
                     }
-                    console.debug("fluid-select.table.col", col);
+                    0;
                 });
                 modalBody.replaceWith(tableBd);
             }
 
-            console.debug("lookupFactory.modalBody", modalBody.html());
+            0;
             c(modal.contents())(scope);
 
             if (sourceUrl) {
@@ -223,8 +223,8 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     t(function () {
                         scope.$apply();
                     });
-                    console.debug("lookupFactory", scope.data);
-                    console.debug("lookupFactory.html", modal.html());
+                    0;
+                    0;
                     modal.modal("show");
                 });
 
@@ -272,8 +272,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
             restrict: "AE",
             template: tc.get("templates/fluid-select.html"),
             link: function (scope, element, attr, ngModel) {
-                console.debug("ngModel", ngModel);
-                console.debug("scope", scope);
+                0;
+                0;
                 var method = "GET";
                 var sourceList = undefined;
                 var fwcLabel = element.find(".fwc-label");
@@ -324,7 +324,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         var li = $("<li>").addClass("fluid-select-item");
                         var a = $("<a>").attr("href", "#").addClass("morris-hover-point").text(new getValue(item, fieldLabel).value).appendTo(li);
                         a.click(function ($event) {
-                            console.debug("fluid-select.click", item);
+                            0;
                             var value = new getValue(item, fieldValue).value;
                             t(function () {
                                 ngModel.$setViewValue(value, $event);
@@ -475,8 +475,9 @@ angular.module("fluid.webComponents.fluidSubcomponent", [])
  * Created by Jerico on 10/09/2015.
  */
 angular.module("fluid.webComponents.fluidSubTable", [])
-    .directive("fluidSubtable", ["$templateCache", "$compile", "$timeout", "$filter", function (tc, c, t, f) {
+    .directive("fluidSubtable", ["$templateCache", "$compile", "$timeout", "$filter", "fluidClient", function (tc, c, t, f, fc) {
 
+        var keyVar = undefined;
 
         return {
             restrict: "AE",
@@ -485,14 +486,10 @@ angular.module("fluid.webComponents.fluidSubTable", [])
             transclude: true,
             link: {
                 pre: function (scope, element, attr) {
+
                     var loaded = attr.tableLoaded;
                     if (!loaded) {
                         var fluidLookupButton = element.find("button[fluid-lookup]");
-
-                        if (!attr.keyVar) {
-                            throw "key-var attribute is required."
-                        }
-
                         if (attr.sourceUrl) {
                             fluidLookupButton.attr("source-url", attr.sourceUrl);
                         }
@@ -510,18 +507,18 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                             fluidLookupButton.attr("method", method);
                         }
 
-                        if (!scope[attr.ngModel]) {
-                            scope[attr.ngModel] = [];
-                            t(function () {
-                                scope.$apply();
-                            })
+                        if (!attr.keyVar) {
+                            throw "key-var attribute is required."
                         }
+                        keyVar = fc.getKeyVar(attr.keyVar);
 
                         var bootstrapBrand = getBootstrapBrand(attr);
-
-
-                        fluidLookupButton.attr("on-lookup", attr.ngModel + ".push(gridItem)").attr(bootstrapBrand, "");
-
+                        fluidLookupButton.attr("ng-model", keyVar + "_lookup").attr(bootstrapBrand, "");
+                        scope[keyVar + "_lookup"] = undefined;
+                        t(function () {
+                            scope.$apply();
+                        });
+                        c(fluidLookupButton)(scope);
                     }
                 },
                 post: function (scope, element, attr, ngModel) {
@@ -529,38 +526,35 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     var columns = [];
                     var fluidLookupButton = element.find("button[fluid-lookup]");
                     var transclude = element.find("ng-transclude");
-                    console.debug("fluidSubtable.transclude", transclude[0]);
                     var validate = "true";
                     var grid = $("<fluid-lookup-grid>").attr("key-var", "gridItem");
                     var gridContainer = $("<div>").addClass("fluid-grid").appendTo(grid);
                     var bootstrapBrand = getBootstrapBrand(attr);
-                    ngModel.$viewChangeListeners.push(function () {
 
-                    });
+                    if (!loaded) {
 
-                    ngModel.$render = function () {
-                        if (!ngModel.$viewValue) {
-                            ngModel.$setViewValue([]);
+                        if (!scope[attr.ngModel]) {
+                            scope[attr.ngModel] = [];
                             t(function () {
                                 scope.$apply();
                             })
                         }
-                    }
-
-                    if (!scope[attr.ngModel]) {
-                        scope[attr.ngModel] = [];
-                        t(function () {
-                            scope.$apply();
-                        })
-                    }
-
-                    if (!loaded) {
 
                         if (attr.lookupTemplate) {
                             grid.attr("lookup-template", attr.lookupTemplate);
                         }
+
                         if (attr.validate) {
                             validate = attr.validate;
+                        }
+
+
+                        if (attr.removeAll) {
+                            var removeAll = scope.$eval(attr.removeAll);
+                            if (removeAll !== undefined && removeAll === false) {
+                                var eraseButton = element.find("button.delete");
+                                eraseButton.remove();
+                            }
                         }
 
                         for (var index = 0; index < transclude.children().length; index++) {
@@ -579,10 +573,10 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                             fluidLookupButton.addClass("hidden");
                         }
 
-                        console.debug("fluidSubtable.columns", columns);
+                        0;
                         var modal = getSubTableModal(attr.label);
                         modal.$modal.attr(bootstrapBrand, "");
-                        setTable(element, attr.keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
+                        setTable(element, keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
                         transclude.remove();
                     }
 
@@ -599,7 +593,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
             template: "<div ng-transclude></div>",
             link: {
                 pre: function (scope, element, attr, controller, transcludeFn) {
-                    console.debug("fluidSubcolumn.pre.element", element[0]);
+                    0;
                 },
                 post: function (scope, element, attr) {
                     var column = {filter: true};
@@ -628,7 +622,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                     column.row = transclude.find(".column-row").html();
                     var form = transclude.find(".column-form").html();
                     column.form = form;
-                    console.debug("fluidSubcolumn.column", column);
+                    0;
                     element.attr("column", JSON.stringify(column));
                     transclude.remove();
                 }
@@ -643,6 +637,73 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     var createButton = element.find("button.create");
     var eraseButton = element.find("button.delete");
+    var sort = undefined;
+    var fieldSorted = undefined;
+    var modeloc = keyVar + "_oc";
+    var keyVarLookup = keyVar + "_lookup";
+
+    var addItem = function (item) {
+        var sortedArray = ngModel.$viewValue;
+        sortedArray.push(item);
+        if (sort) {
+            sortedArray = $filter("orderBy")(sortedArray, fieldSorted, sort === "desc");
+        }
+        if (scope[modeloc]) {
+            scope[modeloc].push(item);
+        }
+        ngModel.$setViewValue(sortedArray);
+        timeout(function () {
+            scope.$apply();
+        });
+    };
+
+
+    var updateItem = function (item, index) {
+        var sortedArray = ngModel.$viewValue;
+        sortedArray[index] = item;
+        if (sort) {
+            sortedArray = $filter("orderBy")(ngModel.$viewValue, fieldSorted, sort === "desc");
+        }
+        if (scope[modeloc]) {
+            scope[modeloc][index] = item;
+        }
+        ngModel.$setViewValue(sortedArray);
+        timeout(function () {
+            scope.$apply();
+        });
+    };
+
+
+    var removeItem = function (index) {
+        ngModel.$viewValue.splice(index, 1);
+        if (scope[modeloc]) {
+            scope[modeloc].splice(index, 1);
+        }
+        timeout(function () {
+            scope.$apply();
+        });
+    };
+
+    scope.$watch(function () {
+        return scope[keyVarLookup];
+    }, function (lookupModel) {
+        if (lookupModel) {
+            addItem(lookupModel);
+            scope[keyVarLookup] = undefined;
+            timeout(function () {
+                scope.$apply();
+            });
+        }
+    });
+
+    ngModel.$render = function () {
+        if (!ngModel.$viewValue) {
+            ngModel.$setViewValue([]);
+            timeout(function () {
+                scope.$apply();
+            })
+        }
+    };
 
     var mode = {
         create: function () {
@@ -689,7 +750,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
             if (scope[keyVar]) {
                 if (scope.$eval(validate))
                     if (!ngModel.$viewValue) ngModel.$setViewValue([]);
-                ngModel.$viewValue.push(scope[keyVar]);
+                addItem(scope[keyVar]);
                 modal.$modal.modal("hide");
             }
         }
@@ -697,7 +758,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
             if (scope[keyVar]) {
                 var $index = modal.actionButton.attr("index");
                 if (scope.$eval(validate)) {
-                    ngModel.$viewValue[$index] = scope[keyVar];
+                    updateItem(scope[keyVar], $index);
                     modal.$modal.modal("hide");
                 }
             }
@@ -707,14 +768,9 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     modal.deleteButton.unbind("click");
     modal.deleteButton.click(function () {
         var $index = modal.deleteButton.attr("index");
-        if (ngModel.$viewValue) {
-            ngModel.$viewValue.splice($index, 1);
-            timeout(function () {
-                scope.$apply();
-            });
-        }
+        removeItem($index);
         modal.$modal.modal("hide");
-        console.debug("$index", $index);
+        0;
     });
 
     var table = element.find("table");
@@ -723,16 +779,16 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     var tr = $("<tr>").attr("ng-repeat", keyVar + " in " + value + " track by $index");
 
     element.find("table." + keyVar).delegate("tr", "click", function ($event) {
-        console.debug("fluidSubtable.tr", $(this));
+        0;
         var eventScope = angular.element($event.target).scope();
-        console.debug("fluidSubtable.eventScope.edit", eventScope);
+        0;
         modal.$modal.modal("show");
         modal.actionButton.text("Update");
         modal.actionButton.attr("index", eventScope.$index);
         modal.deleteButton.attr("index", eventScope.$index);
         mode.edit();
         var copy = {};
-        angular.copy(ngModel.$viewValue[eventScope.$index], copy)
+        angular.copy(ngModel.$viewValue[eventScope.$index], copy);
         scope[keyVar] = copy;
         timeout(function () {
             scope.$apply();
@@ -741,11 +797,22 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
 
     thead.delegate("th", "click", function () {
-        var sorter = $(this).find("a.sort");
-        var sort = sorter.attr("sort");
-        console.debug("fluid-subtable.sorted", sort);
+        var sorter = $(this).find("a.fluid-sort");
+        sort = sorter.attr("sort");
+        fieldSorted = $(this).attr("field-name");
+        var sorting = thead.attr("sorting");
+        if (sorting !== fieldSorted) {
+            thead.find("th[field-name='" + sorting + "']")
+                .removeAttr("sort");
+            thead.find("th[field-name='" + sorting + "'] a")
+                .removeClass("fa-sort-desc")
+                .removeClass("fa-sort-asc");
+        }
 
+
+        0;
         if (sort === undefined) {
+            scope[keyVar + "_oc"] = ngModel.$viewValue;
             sorter.toggleClass("fa fa-sort-desc");
             sorter.attr("sort", "asc");
             sort = "asc";
@@ -761,9 +828,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
             sort = undefined;
         }
 
-        var name = $(this).attr("field-name");
-
-        console.debug("fluid-subtable.sort", name);
+        thead.attr("sorting", fieldSorted);
 
         var sorted = undefined;
         if (sort === "asc") {
@@ -771,8 +836,17 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         } else if (sort === "desc") {
             sorted = true;
         }
-        console.debug("fluid-subtable.sorted", sorted);
-        var sortedArray = $filter("orderBy")(ngModel.$viewValue, name, sorted);
+        0;
+
+        var sortedArray = undefined;
+
+        if (sorted !== undefined) {
+            sortedArray = $filter("orderBy")(ngModel.$viewValue, fieldSorted, sorted);
+            sortedArray.sort = sort;
+        } else {
+            sortedArray = scope[modeloc];
+            0;
+        }
 
         ngModel.$setViewValue(sortedArray);
 
@@ -793,11 +867,11 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         var th = $("<th>").html(col.header).appendTo(thead);
         th.attr("field-name", col.name);
-        $("<a href='#'>").appendTo(th).addClass("sort");
+        $("<a href='#'>").appendTo(th).addClass("fluid-sort");
         td.appendTo(tr);
         $(col.form).appendTo(modal.body);
-        console.debug("subColumn.col.form", col.form);
-        console.debug("subColumn.createdTd", td);
+        0;
+        0;
 
     }
 
@@ -806,7 +880,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     timeout(function () {
         scope.$apply();
     });
-    console.debug("fluid-subtable.modal.contents", modal.$modal[0]);
+    0;
     compile(modal.$modal.contents())(scope);
     element.attr("table-loaded", true);
 }
@@ -985,7 +1059,7 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.find(".modal").find(".modal-header").addClass("bg-primary");
                 } else if (element.hasClass("modal")) {
                     element.find("modal-header").addClass("bg-primary");
-                    console.debug("modal-header-primary");
+                    0;
                 }
             }
         }
@@ -1028,12 +1102,31 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         scope.year = 1957;
         scope.sample = "rer";
         scope.change = function (item) {
-            console.debug("sampleCtrl.change", item);
+            0;
         }
         scope.onLookUp = function (item, $event) {
             scope.selectedSample = item;
-            console.debug("wc.onLookUp", $event)
+            0
         }
+    }])
+    .service("fluidClient", [function () {
+
+        this.getKeyVar = function (keyVar) {
+            if (!this.keyVars) {
+                this.keyVars = [];
+            }
+            if (this.keyVars[keyVar] != null) {
+                var keys = this.keyVars[keyVar];
+                keys++;
+                this.keyVars[keyVar] = keys;
+                return keyVar + "_" + keys;
+            } else {
+                this.keyVars[keyVar] = 0;
+                return keyVar;
+            }
+        };
+
+        return this;
     }])
     .factory("samples", function () {
 
@@ -1044,6 +1137,22 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         }, {
             "name": "Pogi",
             year: 1991,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "John Doe",
+            year: 1978,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "James Hitler",
+            year: 1998,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "Anita",
+            year: 1998,
+            list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
+        }, {
+            "name": "Calcium Kid",
+            year: 1998,
             list: [{"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}, {"name": "Nica", "year": "1976"}]
         }];
     });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
