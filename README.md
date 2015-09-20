@@ -14,9 +14,9 @@ bower install -g fluid-web-components
 ```
 
 ## Building Fluid-web-components
-- [Sass:](http://sass-lang.com/) We sass to style our components
+- [Sass:](http://sass-lang.com/) We used sass to style our components
 - To install sass ``` gem install sass ```
-- [Grunt:](http://gruntjs.com/) We use Grunt as our build system
+- [Grunt:](http://gruntjs.com/) We used Grunt as our build system
 - To install dependencies run ``` npm install -g ```
 - To build the project run ``` npm package ```
 
