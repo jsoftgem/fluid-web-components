@@ -41,7 +41,7 @@ bower install -g fluid-web-components
 
 ### Documentation
 
-[fluid-web-components](http://jsoftgem.github.io/fluid-web-components)
+[demo](http://jsoftgem.github.io/fluid-web-components)
 
 ### Authors and Contributors
 [Jerico de Guzman](https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351) - Senior Software Engineer.
