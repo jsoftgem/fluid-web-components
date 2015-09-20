@@ -5,7 +5,7 @@ Fluid-web-components is a simple web application component written in [AngularJS
 - To provide the basic components used in web applications like, tables, pagination, drop-down, etc., with simplified options and tags.
 - Creating a drop-down component can be as simple as the following:
 ```
-   <fluid-select label=Limit" values="25,50,75,100" ng-model="limitSize"></fluid-select>
+   <fluid-select label="Limit" values="25,50,75,100" ng-model="limitSize"></fluid-select>
 ```
 
 ## Quick start
@@ -41,7 +41,7 @@ bower install -g fluid-web-components
 
 ### Documentation
 
-[fluid-web-components](http://jsoftgem.github.io/fluid-web-components)
+[demo](http://jsoftgem.github.io/fluid-web-components)
 
 ### Authors and Contributors
 [Jerico de Guzman](https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351) - Senior Software Engineer.

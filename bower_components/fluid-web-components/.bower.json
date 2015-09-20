@@ -1,6 +1,6 @@
 {
   "name": "fluid-web-components",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/js/web-components.js",
   "dependencies": {
     "bootstrap": "3.3.4",
@@ -21,14 +21,14 @@
     "Jerico <jerico@jsofttechnologies.com>"
   ],
   "homepage": "https://github.com/jsoftgem/fluid-web-components",
-  "_release": "0.1.0",
+  "_release": "0.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.0",
-    "commit": "d5f24ba2151c669abbc2c36f655fb9ebbe23a02b"
+    "tag": "v0.1.1",
+    "commit": "66fffc28ca9d8792e85ae3226d156ced34f65834"
   },
   "_source": "git://github.com/jsoftgem/fluid-web-components.git",
-  "_target": "~0.1.0",
+  "_target": "~0.1.1",
   "_originalSource": "fluid-web-components",
   "_direct": true
 }

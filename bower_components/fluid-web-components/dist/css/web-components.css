@@ -114,27 +114,27 @@ fluid-subtable[danger] table th.fluid-sort a {
 }
 
 .fluid-subtable.fluid-subtable-form.modal[primary] .modal-header {
-  color: #fff;
+  color: white;
   background: #337ab7;
 }
 
 .fluid-subtable.fluid-subtable-form.modal[info] .modal-header {
-  color: #fff;
+  color: white;
   background: #5bc0de;
 }
 
 .fluid-subtable.fluid-subtable-form.modal[warning] .modal-header {
-  color: #fff;
+  color: white;
   background: #f0ad4e;
 }
 
 .fluid-subtable.fluid-subtable-form.modal[danger] .modal-header {
-  color: #fff;
+  color: white;
   background: #d9534f;
 }
 
 .fluid-subtable.fluid-subtable-form.modal[success] .modal-header {
-  color: #fff;
+  color: white;
   background: #5cb85c;
 }
 
@@ -179,7 +179,7 @@ fluid-subtable[danger] table th.fluid-sort a {
 .fluid-lookup .grid:hover {
   cursor: pointer;
   background: #337ab7;
-  color: #fff;
+  color: white;
 }
 
 .fluid-lookup table.lookup-table th {
@@ -216,28 +216,26 @@ fluid-subtable[danger] table th.fluid-sort a {
 }
 
 .fluid-lookup.modal[primary] .modal-header {
-  color: #fff;
+  color: white;
   background: #337ab7;
 }
 
 .fluid-lookup.modal[info] .modal-header {
-  color: #fff;
+  color: white;
   background: #5bc0de;
 }
 
 .fluid-lookup.modal[danger] .modal-header {
-  color: #fff;
+  color: white;
   background: #d9534f;
 }
 
 .fluid-lookup.modal[success] .modal-header {
-  color: #fff;
+  color: white;
   background: #5cb85c;
 }
 
 .fluid-lookup.modal[warning] .modal-header {
-  color: #fff;
+  color: white;
   background: #f0ad4e;
 }
-
-/*# sourceMappingURL=sass.css.map */
