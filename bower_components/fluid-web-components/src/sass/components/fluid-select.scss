@@ -1,0 +1,31 @@
+@import "../variables";
+
+%fluid-select {
+  font-size: $font-size-base;
+}
+
+.fluid-select .fluid-select-dropdown {
+  @extend %fluid-select;
+  width: $full-width;
+}
+
+.fluid-select .fluid-select-dropdown .dropdown-toggle {
+  @extend %fluid-select;
+  text-align: $text-align-component-label;
+  width: $full-width;
+}
+
+.fluid-select .fluid-select-dropdown .dropdown-toggle .caret {
+  text-align: $text-align-component-caret;
+  margin: $margin-caret;
+  float: right;
+}
+
+.fluid-select .fluid-select-item a {
+  cursor: $cursor-pointer;
+}
+
+.fluid-select .dropdown-menu {
+  max-height: $dropdown-maxHeight;
+  overflow-y: auto;
+}

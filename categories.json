@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "active": true,
+    "description": "All accessories",
+    "category": "Accessories"
+  },
+  {
+    "id": 2,
+    "active": true,
+    "description": "Music and stuff",
+    "category": "Music/Album"
+  },
+  {
+    "id": 3,
+    "active": true,
+    "description": "All dairy products",
+    "category": "Goods/Diary"
+  },
+  {
+    "id": 4,
+    "active": true,
+    "description": "All clothing accessory products",
+    "category": "Clothes/Accessories"
+  },
+  {
+    "id": 5,
+    "active": true,
+    "description": "All mobile and other gadget products",
+    "category": "Electronic/Gadgets"
+  }
+]

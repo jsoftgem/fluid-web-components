@@ -1,0 +1,11 @@
+@import "../variables";
+@import "../mixin";
+
+.fluid-pagination {
+
+}
+
+.fluid-pagination .pagination ul li {
+  cursor: $cursor-pointer;
+  @extend .disable_text_highlighting;
+}

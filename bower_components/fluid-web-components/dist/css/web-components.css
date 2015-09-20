@@ -1,0 +1,243 @@
+.fluid-select .fluid-select-dropdown, .fluid-select .fluid-select-dropdown .dropdown-toggle {
+  font-size: 17px;
+}
+
+.fluid-select .fluid-select-dropdown {
+  width: 100%;
+}
+
+.fluid-select .fluid-select-dropdown .dropdown-toggle {
+  text-align: left;
+  width: 100%;
+}
+
+.fluid-select .fluid-select-dropdown .dropdown-toggle .caret {
+  text-align: center;
+  margin: 10px;
+  float: right;
+}
+
+.fluid-select .fluid-select-item a {
+  cursor: pointer;
+}
+
+.fluid-select .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.table-header, .fluid-subtable table th, fluid-subtable[primary] table th, fluid-subtable[info] table th, fluid-subtable[danger] table th, fluid-subtable[warning] table th, fluid-subtable[success] table th, .fluid-subtable table tr td, .fluid-lookup table[primary].lookup-table th, .fluid-lookup table[info].lookup-table th, .fluid-lookup table[danger].lookup-table th, .fluid-lookup table[warning].lookup-table th, .fluid-lookup table[success].lookup-table th {
+  text-align: center;
+  padding: 5px;
+}
+
+.fluid-grid {
+  margin: 15px;
+}
+
+.disable_text_highlighting, .fluid-subtable table th {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  /* Webkit */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE 10  */
+  /* Currently not supported in Opera but will be soon */
+  -o-user-select: none;
+  user-select: none;
+}
+
+.fluid-subtable table {
+  width: 100%;
+}
+
+.fluid-subtable table tr {
+  height: 40px;
+}
+
+.fluid-subtable table th {
+  border: 1px solid;
+  cursor: pointer;
+}
+
+fluid-subtable[primary] table th {
+  border-color: #337ab7;
+}
+
+fluid-subtable[info] table th {
+  border-color: #5bc0de;
+}
+
+fluid-subtable[danger] table th {
+  border-color: #d9534f;
+}
+
+fluid-subtable[warning] table th {
+  border-color: #f0ad4e;
+}
+
+fluid-subtable[success] table th {
+  border-color: #5cb85c;
+}
+
+.fluid-subtable table tr td {
+  cursor: pointer;
+}
+
+.fluid-subtable table th.fluid-sort a {
+  float: right;
+}
+
+fluid-subtable[primary] table .fluid-sort a {
+  color: #337ab7;
+}
+
+fluid-subtable[info] table th.fluid-sort a {
+  color: #5bc0de;
+}
+
+fluid-subtable[warning] table th.fluid-sort a {
+  color: #f0ad4e;
+}
+
+fluid-subtable[success] table th.fluid-sort a {
+  color: #5cb85c;
+}
+
+fluid-subtable[danger] table th.fluid-sort a {
+  color: #d9534f;
+}
+
+.fluid-subtable .panel-title.fluid-table-panel-title {
+  height: 40px;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[primary] .modal-header {
+  color: #fff;
+  background: #337ab7;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[info] .modal-header {
+  color: #fff;
+  background: #5bc0de;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[warning] .modal-header {
+  color: #fff;
+  background: #f0ad4e;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[danger] .modal-header {
+  color: #fff;
+  background: #d9534f;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[success] .modal-header {
+  color: #fff;
+  background: #5cb85c;
+}
+
+.table-header, .fluid-subtable table th, fluid-subtable[primary] table th, fluid-subtable[info] table th, fluid-subtable[danger] table th, fluid-subtable[warning] table th, fluid-subtable[success] table th, .fluid-subtable table tr td, .fluid-lookup table[primary].lookup-table th, .fluid-lookup table[info].lookup-table th, .fluid-lookup table[danger].lookup-table th, .fluid-lookup table[warning].lookup-table th, .fluid-lookup table[success].lookup-table th {
+  text-align: center;
+  padding: 5px;
+}
+
+.fluid-grid {
+  margin: 15px;
+}
+
+.disable_text_highlighting, .fluid-subtable table th {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  /* Webkit */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE 10  */
+  /* Currently not supported in Opera but will be soon */
+  -o-user-select: none;
+  user-select: none;
+}
+
+.fluid-lookup {
+  color: #333333;
+}
+
+.default-grid, .fluid-lookup .grid, .fluid-lookup .grid:hover {
+  padding: 0;
+  text-align: center;
+  border-radius: 4px;
+  margin: 2px;
+  display: inline-block;
+}
+
+.fluid-lookup .grid {
+  background: #5bc0de;
+}
+
+.fluid-lookup .grid:hover {
+  cursor: pointer;
+  background: #337ab7;
+  color: #fff;
+}
+
+.fluid-lookup table.lookup-table th {
+  text-align: center;
+  border: 1px solid;
+}
+
+.fluid-lookup table.lookup-table tr {
+  text-align: center;
+}
+
+.fluid-lookup table.lookup-table tr:hover {
+  cursor: pointer;
+}
+
+.fluid-lookup table[primary].lookup-table th {
+  border-color: #337ab7;
+}
+
+.fluid-lookup table[info].lookup-table th {
+  border-color: #5bc0de;
+}
+
+.fluid-lookup table[danger].lookup-table th {
+  border-color: #d9534f;
+}
+
+.fluid-lookup table[warning].lookup-table th {
+  border-color: #f0ad4e;
+}
+
+.fluid-lookup table[success].lookup-table th {
+  border-color: #5cb85c;
+}
+
+.fluid-lookup.modal[primary] .modal-header {
+  color: #fff;
+  background: #337ab7;
+}
+
+.fluid-lookup.modal[info] .modal-header {
+  color: #fff;
+  background: #5bc0de;
+}
+
+.fluid-lookup.modal[danger] .modal-header {
+  color: #fff;
+  background: #d9534f;
+}
+
+.fluid-lookup.modal[success] .modal-header {
+  color: #fff;
+  background: #5cb85c;
+}
+
+.fluid-lookup.modal[warning] .modal-header {
+  color: #fff;
+  background: #f0ad4e;
+}
+
+/*# sourceMappingURL=sass.css.map */

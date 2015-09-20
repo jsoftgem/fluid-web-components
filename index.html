@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html ng-app="mainApp">
+<head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -8,54 +8,72 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/fluid-web-components/dist/css/web-components.min.css">
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     <title>Fluid-web-components by jsoftgem</title>
-  </head>
+</head>
 
-  <body>
-    <header>
-      <div class="inner">
+<body>
+<nav class="nav navbar-default navbar-fixed-top">
+
+</nav>
+<header>
+    <div class="inner">
         <h1>Fluid-web-components</h1>
+
         <h2>A simple web application component written in AngularJS and Bootstrap.</h2>
-        <a href="https://github.com/jsoftgem/fluid-web-components" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+        <a style="height: 120px;width:220px" href="https://github.com/jsoftgem/fluid-web-components" class="button">
+            <small>View project on</small>
+            GitHub</a>
+    </div>
+</header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
+<div id="content-wrapper">
+    <div class="inner clearfix">
         <section id="main-content">
-          <h1>
-<a id="what-is-fluid-web-components" class="anchor" href="#what-is-fluid-web-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Fluid-web-components?</h1>
+            <h1>
+                <a id="what-is-fluid-web-components" class="anchor"
+                   href="#what-is-fluid-web-components"
+                   aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Fluid-web-components?</h1>
 
-<p>Fluid-web-components is a simple web application component written in <a href="https://angularjs.org/">AngularJS</a> and <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+            <p>Fluid-web-components is a simple web application component written in <a href="https://angularjs.org/">AngularJS</a>
+                and <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
 
-<h2>
-<a id="goal" class="anchor" href="#goal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal</h2>
+            <h2>
+                <a id="goal" class="anchor" href="#goal" aria-hidden="true"><span
+                        class="octicon octicon-link"></span></a>Goal</h2>
 
-<ul>
-<li>To provide the basic components used in web applications like, tables, pagination, drop-down, etc., with simplified options and tags.</li>
-<li>Creating a drop-down component can be as simple as the following:</li>
-</ul>
+            <ul>
+                <li>To provide the basic components used in web applications like, tables, pagination, drop-down, etc.,
+                    with simplified options and tags.
+                </li>
+                <li>Creating a drop-down component can be as simple as the following:</li>
+            </ul>
 
 <pre><code>   &lt;fluid-select label=Limit" values="25,50,75,100" ng-model="limitSize"&gt;&lt;/fluid-select&gt;
 </code></pre>
 
-<h2>
-<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick start</h2>
+            <h2>
+                <a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span
+                        class="octicon octicon-link"></span></a>Quick start</h2>
 
 <pre><code>bower install -g fluid-web-components
 </code></pre>
 
-<h3>
-<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h3>
+            <h2>
+                <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span
+                        class="octicon octicon-link"></span></a>Getting Started</h2>
 
-<ul>
-<li> Prerequisite libraries:</li>
-</ul>
+            <ul>
+                <li> Prerequisite libraries:</li>
+            </ul>
 
 <pre><code>    &lt;link href="bootstrap.css" rel="stylesheet"&gt;
     &lt;link href="font-awesome.css" rel="stylesheet"&gt;
@@ -64,43 +82,306 @@
     &lt;script src="bootstrap.js" type="text/javascript"&gt;&lt;/script&gt;
     &lt;script src="angular-filter" type="text/javascript"&gt;&lt;/script&gt;
 </code></pre>
+            <ul>
+                <li>Add the following resources to your html file</li>
+            </ul>
+<pre><code>&lt;link href="web-components.css" rel="stylesheet"&gt;
+    &lt;script src="web-components.js" type="text/javascript"&gt;&lt;/script&gt;
+</code></pre>
+            <ul>
+                <li>Import <code>fluid.webComponents</code> module to your app:</li>
+            </ul>
 
-<ul>
-<li>Import <code>fluid.webComponents</code> module to your app:</li>
-</ul>
-
-<pre><code>  angular.module("mainApp",["fluid.webComponents"])
+<pre><code> angular.module("mainApp",["fluid.webComponents"])
 
 </code></pre>
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p><a href="https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351">Jerico de Guzman</a> - Senior Software Engineer.</p>
+            <h1>
+                <a id="components" class="anchor" href="#components" aria-hidden="true"><span
+                        class="octicon octicon-link"></span></a>Components
+                <h2>
+                    <a id="fluid-select" class="anchor" href="#fluid-select" aria-hidden="true"><span
+                            class="octicon octicon-link"></span></a>fluid-select - a simplified drop-down component for AngularJS
+                </h2>
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+                <ul>
+                    <li>Using values</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSelectValuesPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectValuesHtml">Html</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSelectValuesPreview" class="tab-pane fade in active">
+                        <div class="form-group">
+                            <fluid-select label="Size" values="25,50,75,100" ng-model="sizeModel"></fluid-select>
+                        </div>
+                    </div>
+                    <div id="fluidSelectValuesHtml" class="tab-pane fade">
+                        <pre>
+                    <code>
+                        <p>&lt;fluid-select label=&quot;Size&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel&quot;&gt;&lt;/fluid-select&gt;</p>
 
-<p><a href="mailto:jerico@jsofttechnologies.com">jerico@jsofttechnologies.com</a></p>
+                    </code>
+                         </pre>
+                    </div>
+                </div>
+
+                <ul>
+                    <li>Using factory</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSelectFactoryPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectFactoryHtml">Html</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectFactoryJS">JS</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSelectFactoryPreview" class="tab-pane fade in active">
+                        <div class="form-group">
+                            <fluid-select label="People" factory="People" ng-model="peopleModel"
+                                          field-label="name"></fluid-select>
+                        </div>
+                    </div>
+                    <div id="fluidSelectFactoryHtml" class="tab-pane fade">
+                   <pre>
+                    <code>
+                        <p>&lt;fluid-select label=&quot;People&quot; factory=&quot;People&quot; ng-model=&quot;peopleModel&quot;
+                            field-label=&quot;name&quot;&gt;&lt;/fluid-select&gt;</p>
+
+                    </code>
+                        </pre>
+                    </div>
+                    <div id="fluidSelectFactoryJS" class="tab-pane fade">
+                        <pre>
+<code>angular.module(&quot;mainApp&quot;, [&quot;fluid.webComponents&quot;])
+    .factory(&quot;People&quot;, function () {
+    return [{name: &quot;John Doe&quot;, email: &quot;john_doe@jsofttehcnologies.com&quot;,
+    age: 25},{name: &quot;Mary Ann&quot;, email: &quot;mary_ann@jsofttechnologies.com&quot;,
+    age: 23}, {name: &quot;Abigail Smith&quot;, email: &quot;abigail_smith@jsofttechnologies.com&quot;,
+    age: 28},{name: &quot;Henry Flint&quot;, email: &quot;henry_flint@jsofttehcnologies.com&quot;,
+    age: 32},{name: &quot;Allen Shaw&quot;, email: &quot;allen_shaw@jsofttechnologies.com&quot;,
+    age: 25}, {name: &quot;Calcium Kid&quot;, email: &quot;calcium_kid@jsofttechnologies.com&quot;,
+    age: 35}]
+    });</code>
+                        </pre>
+
+                    </div>
+                </div>
+                <ul>
+                    <li>Using async data</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSelectAsyncPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectAsyncHtml">Html</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectJSONHtml">JSON</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSelectAsyncPreview" class="tab-pane fade in active">
+                        <div class="form-group">
+                            <fluid-select label="Categories" ng-model="categoryModel"
+                                          source-url="/fluid-web-components/categories.json" field-label="category"
+                                          field-value="id"></fluid-select>
+                        </div>
+                    </div>
+                    <div id="fluidSelectAsyncHtml" class="tab-pane fade">
+                        <pre>
+<code>&lt;fluid-select label=&quot;Categories&quot; ng-model=&quot;categoryModel&quot;source-url=&quot;/fluid-web-components/categories.json&quot;
+    field-label=&quot;category&quot; field-value=&quot;id&quot;&gt;&lt;/fluid-select&gt;</code>
+                         </pre>
+                    </div>
+                    <div id="fluidSelectJSONHtml" class="tab-pane fade">
+                        <pre>
+                            <code>
+                                [{
+                                "id": 1,
+                                "active": true,
+                                "description": "All accessories",
+                                "category": "Accessories"
+                                },
+                                {
+                                "id": 2,
+                                "active": true,
+                                "description": "Music and stuff",
+                                "category": "Music/Album"
+                                },
+                                {
+                                "id": 3,
+                                "active": true,
+                                "description": "All dairy products",
+                                "category": "Goods/Diary"
+                                },
+                                {
+                                "id": 4,
+                                "active": true,
+                                "description": "All clothing accessory products",
+                                "category": "Clothes/Accessories"
+                                },
+                                {
+                                "id": 5,
+                                "active": true,
+                                "description": "All mobile and other gadget products",
+                                "category": "Electronic/Gadgets"
+                                }]
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <ul>
+                    <li>With bootstrap brand colors</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSelectBrandPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSelectBrandHtml">Html</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSelectBrandPreview" class="tab-pane fade in active">
+                        <div class="form-group">
+                            <fluid-select label="Size - primary" values="25,50,75,100" ng-model="sizeModel1"
+                                          primary></fluid-select>
+                        </div>
+                        <div class="form-group">
+                            <fluid-select label="Size - info" values="25,50,75,100" ng-model="sizeModel2"
+                                          info></fluid-select>
+                        </div>
+                        <div class="form-group">
+                            <fluid-select label="Size - danger" values="25,50,75,100" ng-model="sizeModel3"
+                                          danger></fluid-select>
+                        </div>
+                        <div class="form-group">
+                            <fluid-select label="Size - success" values="25,50,75,100" ng-model="sizeModel4"
+                                          success></fluid-select>
+                        </div>
+                        <div class="form-group">
+                            <fluid-select label="Size - warning" values="25,50,75,100" ng-model="sizeModel5"
+                                          warning></fluid-select>
+                        </div>
+                    </div>
+                    <div id="fluidSelectBrandHtml" class="tab-pane fade">
+                        <pre>
+                    <code>
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;fluid-select label=&quot;Size - primary&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel1&quot; primary&gt;&lt;/fluid-select&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;fluid-select label=&quot;Size - info&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel2&quot; info&gt;&lt;/fluid-select&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;fluid-select label=&quot;Size - danger&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel3&quot; danger&gt;&lt;/fluid-select&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;fluid-select label=&quot;Size - success&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel4&quot; success&gt;&lt;/fluid-select&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;fluid-select label=&quot;Size - warning&quot; values=&quot;25,50,75,100&quot; ng-model=&quot;sizeModel5&quot; warning&gt;&lt;/fluid-select&gt;
+&lt;/div&gt;
+                    </code>
+                         </pre>
+                    </div>
+                </div>
+
+                <table class="panel-body table table-bordered">
+                    <thead class="bg-primary">
+                    <th class="text-center">Attribute</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Description</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>label</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the label for component</td>
+                    </tr>
+                    <tr>
+                        <td>values</td>
+                        <td>String|Array|default:none</td>
+                        <td>Specifies the select values</td>
+                    </tr>
+                    <tr>
+                        <td>factory</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the factory to use as select values</td>
+                    </tr>
+                    <tr>
+                        <td>source-url</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the url of async data to use as select values</td>
+                    </tr>
+                    <tr>
+                        <td>field-label</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the property to use as select label</td>
+                    </tr>
+                    <tr>
+                        <td>field-value</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the property to use as select(ngModel) value</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <h2>
+                    <a id="fluid-lookup" class="anchor" href="#fluid-lookup" aria-hidden="true"><span
+                            class="octicon octicon-link"></span></a>fluid-lookup - a flexible pop-up selection component
+                </h2>
+
+
+                <ul>
+                    <li>Basic</li>
+                </ul>
+
+                    <a id="fluid-subtable" class="anchor" href="#fluid-subtable" aria-hidden="true"><span
+                            class="octicon octicon-link"></span></a>fluid-subtable
+                </h2>
+
+
+                <h2>
+                    <a id="fluid-pagination" class="anchor" href="#fluid-lookup" aria-hidden="true"><span
+                            class="octicon octicon-link"></span></a>fluid-pagination
+                </h2>
+
+            </h1>
+
+            <h1>
+                <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors"
+                   aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h1>
+
+            <p><a href="https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351">Jerico de Guzman</a> - Senior Software
+                Engineer.</p>
+
+            <h1>
+                <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span
+                        class="octicon octicon-link"></span></a>Support or Contact</h1>
+
+            <p><a href="mailto:jerico@jsofttechnologies.com">jerico@jsofttechnologies.com</a></p>
         </section>
 
         <aside id="sidebar">
-          <a href="https://github.com/jsoftgem/fluid-web-components/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/jsoftgem/fluid-web-components/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+            <a style="height: 120px;width:200px" href="https://github.com/jsoftgem/fluid-web-components/zipball/master"
+               class="button">
+                <small>Download</small>
+                .zip file
+            </a>
+            <a style="height: 120px;width:200px" href="https://github.com/jsoftgem/fluid-web-components/tarball/master"
+               class="button">
+                <small>Download</small>
+                .tar.gz file
+            </a>
 
-          <p class="repo-owner"><a href="https://github.com/jsoftgem/fluid-web-components"></a> is maintained by <a href="https://github.com/jsoftgem">jsoftgem</a>.</p>
+            <p class="repo-owner"><a href="https://github.com/jsoftgem/fluid-web-components"></a> is maintained by <a
+                    href="https://github.com/jsoftgem">jsoftgem</a>.</p>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+            <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme
+                by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
-      </div>
     </div>
-
-  
-  </body>
+</div>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
+<script type="text/javascript" src="bower_components/fluid-web-components/dist/js/web-components.min.js"></script>
+<script type="text/javascript" src="javascripts/main.js"></script>
+</body>
 </html>

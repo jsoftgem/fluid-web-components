@@ -1,0 +1,111 @@
+@import "../variables";
+@import "../mixin";
+
+.fluid-subtable {
+}
+
+.fluid-subtable .column-form {
+
+}
+
+.fluid-subtable .column-row {
+
+}
+
+.fluid-subtable table {
+  width: $full-width;
+}
+
+.fluid-subtable table tr {
+  height: $row-min-height;
+}
+
+.fluid-subtable table th {
+  @extend .table-header;
+  @extend .disable_text_highlighting;
+  border: $table-header-border;
+  cursor: $cursor-pointer;
+}
+
+fluid-subtable[primary] table th {
+  @extend .table-header;
+  border-color: $brand-primary;
+}
+
+fluid-subtable[info] table th {
+  @extend .table-header;
+  border-color: $brand-info;
+}
+
+fluid-subtable[danger] table th {
+  @extend .table-header;
+  border-color: $brand-danger;
+}
+
+fluid-subtable[warning] table th {
+  @extend .table-header;
+  border-color: $brand-warning;
+}
+
+fluid-subtable[success] table th {
+  @extend .table-header;
+  border-color: $brand-success;
+}
+
+.fluid-subtable table tr td {
+  @extend .table-header;
+  cursor: $cursor-pointer;
+}
+
+.fluid-subtable table th.fluid-sort a {
+  float: right;
+}
+
+fluid-subtable[primary] table .fluid-sort a {
+  color: $brand-primary;
+}
+
+fluid-subtable[info] table th.fluid-sort a {
+  color: $brand-info;
+}
+
+fluid-subtable[warning] table th.fluid-sort a {
+  color: $brand-warning;
+}
+
+fluid-subtable[success] table th.fluid-sort a {
+  color: $brand-success;
+}
+
+fluid-subtable[danger] table th.fluid-sort a {
+  color: $brand-danger;
+}
+
+.fluid-subtable .panel-title.fluid-table-panel-title {
+  height: 40px;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[primary] .modal-header {
+  color: $text-active;
+  background: $brand-primary;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[info] .modal-header {
+  color: $text-active;
+  background: $brand-info;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[warning] .modal-header {
+  color: $text-active;
+  background: $brand-warning;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[danger] .modal-header {
+  color: $text-active;
+  background: $brand-danger;
+}
+
+.fluid-subtable.fluid-subtable-form.modal[success] .modal-header {
+  color: $text-active;
+  background: $brand-success;
+}
