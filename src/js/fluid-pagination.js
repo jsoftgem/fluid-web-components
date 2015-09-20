@@ -1,5 +1,5 @@
 /**
- * TODO: fluid-pagination creates size limit to specified ng-model and creates pagination.
+ *  fluid-pagination creates size limit to specified ng-model and creates pagination.
  *
  * request could have the following properties:
  *  start,limit, sort,field
