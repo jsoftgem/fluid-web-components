@@ -318,6 +318,11 @@
                         <td>String|default:none</td>
                         <td>Specifies the property to use as select(ngModel) value</td>
                     </tr>
+                    <tr>
+                        <td>method</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the http method to use for the source-url</td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -418,6 +423,109 @@
                     </div>
                 </div>
 
+                <ul>
+                    <li>Using table selection</li>
+                </ul>
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidLookupTablePreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidLookupTableHtml">Html</a></li>
+                    <li><a data-toggle="tab" href="#fluidLookupTableData">JSON</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidLookupTablePreview" class="tab-pane fade in active" style="background: whitesmoke">
+                        <div class="form-group" style="margin: 10px">
+                            <button type="button" info class="btn" label="Animals" ng-model="lookupSelectedAnimalTable"
+                                    fluid-lookup
+                                    source-url="animals.json">
+                                Animal
+                                <i class="fa fa-search"></i>
+                                <fluid-lookup-table key-var="animalTable">
+                                        <div header="Name" class="column-row">{{animalTable.name}}</div>
+                                        <div header="Image" class="column-row">
+                                            <img ng-src="{{animalTable.img}}" height="125" width="175">
+                                        </div>
+                                </fluid-lookup-table>
+                            </button>
+
+                            <div ng-if="lookupSelectedAnimalTable">
+                                <div style="padding:15px 0;">
+                                    <div><b>{{lookupSelectedAnimalTable.name}}</b></div>
+                                    <div></div>
+                                    <div>
+                                        <img ng-src="{{lookupSelectedAnimalTable.img}}" height="125" width="175">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="fluidLookupTableHtml" class="tab-pane fade">
+                        <pre>
+                    <code>
+                        <escape>
+<div class="form-group" style="margin: 10px">
+    <button type="button" info class="btn" label="Animals" ng-model="lookupSelectedAnimalTable"
+      fluid-lookup
+     source-url="animals.json">
+    Animal
+    <i class="fa fa-search"></i>
+    <fluid-lookup-table key-var="animalTable">
+       <div header="Name" class="column-row">{{animalTable.name}}</div>
+       <div header="Image" class="column-row">
+           <img ng-src="{{animalTable.img}}" height="125" width="175">
+       </div>
+    </fluid-lookup-table>
+    </button>
+
+    <div ng-if="lookupSelectedAnimalTable">
+       <div style="padding:15px 0;">
+        <div><b>{{lookupSelectedAnimalTable.name}}</b></div>
+        <div></div>
+        <div>
+        <img ng-src="{{lookupSelectedAnimalTable.img}}" height="125" width="175">
+       </div>
+      </div>
+       </div>
+
+</div>
+                        </escape>
+                    </code>
+                         </pre>
+                    </div>
+                    <div id="fluidLookupTableData" class="tab-pane fade">
+                        <pre>
+                            <code>
+[{
+ "name": "Dog",
+"img": "images/animals/dog.jpg"
+},
+{
+"name": "Cat",
+"img": "images/animals/cat.jpg"
+},
+{
+"name": "Bear",
+"img": "images/animals/bear.jpg"
+},
+{
+"name": "Wolf",
+"img": "images/animals/wolf.jpg"
+},
+{
+"name": "Lion",
+"img": "images/animals/lion.jpg"
+},
+{
+"name": "Horse",
+"img": "images/animals/horse.jpg"
+}]
+                            </code>
+                        </pre>
+
+                    </div>
+                </div>
+
                 <table class="panel-body table table-bordered">
                     <thead class="bg-primary">
                     <th class="text-center">Attribute</th>
@@ -440,6 +548,11 @@
                         <td>String|default:none</td>
                         <td>Specifies the url of async data to use as the selection values</td>
                     </tr>
+                    <tr>
+                        <td>method</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the http method to use for the source-url</td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -459,7 +572,7 @@
                         </tr>
                         <tr>
                             <td>fluid-lookup-table</td>
-                            <td>Set the lookup style as table</td>
+                            <td>Set the lookup style as table; To specify column value add class 'column-row' e.g. &lt;div class="column-row"&gt;value&lt;div&gt; </td>
                         </tr>
                         </tbody>
                     </table>
@@ -480,6 +593,11 @@
                             <td>lookup-template</td>
                             <td>String|default:none</td>
                             <td>Specifies the ng-template to use</td>
+                        </tr>
+                        <tr>
+                            <td>header (fluid-lookup-table)</td>
+                            <td>String|default:none</td>
+                            <td>Specifies the header for table column</td>
                         </tr>
                         </tbody>
                     </table>
