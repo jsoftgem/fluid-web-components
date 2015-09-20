@@ -606,15 +606,314 @@
 
                 <h2>
                     <a id="fluid-subtable" class="anchor" href="#fluid-subtable" aria-hidden="true"><span
-                            class="octicon octicon-link"></span></a>fluid-subtable
+                            class="octicon octicon-link"></span></a>fluid-subtable - a flexible table for crud app.
                 </h2>
+
+
+                <ul>
+                    <li>Basic Sub Table</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSubTableBasicPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSubTableBasicHtml">Html</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSubTableBasicPreview" class="tab-pane fade in active">
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <div><b>peopleList</b></div>
+                            <code>
+
+                                {{peopleList}}
+
+                            </code>
+
+                        </div>
+
+                        <div></div>
+                        <div class="form-group">
+                            <fluid-subtable primary label="People" ng-model="peopleList" key-var="basicPeople">
+                                <fluid-subcolumn  header="Name" name="name">
+                                    <div class="column-row">
+                                        {{basicPeople.name}}
+                                    </div>
+                                    <div class="column-form">
+                                        <label class="control-label" for="basicTablePeopleNameForm">Name</label>
+                                        <input id="basicTablePeopleNameForm" class="form-control" ng-model="basicPeople.name">
+                                    </div>
+                                </fluid-subcolumn>
+                                <fluid-subcolumn  header="Email" name="email">
+                                    <div class="column-row">
+                                        {{basicPeople.email}}
+                                    </div>
+                                    <div class="column-form">
+                                        <label class="control-label" for="basicTablePeopleEmailForm">Email</label>
+                                        <input id="basicTablePeopleEmailForm" class="form-control" ng-model="basicPeople.email">
+                                    </div>
+                                </fluid-subcolumn>
+                            </fluid-subtable>
+                        </div>
+
+                    </div>
+                    <div id="fluidSubTableBasicHtml" class="tab-pane fade">
+                        <pre><code>
+                        <escape>
+<fluid-subtable primary label="People" ng-model="peopleList" key-var="basicPeople">
+ <fluid-subcolumn  header="Name" name="name">
+  <div class="column-row">
+   {{basicPeople.name}}
+    </div>
+   <div class="column-form">
+  <label class="control-label" for="basicTablePeopleNameForm">Name</label>
+  <input id="basicTablePeopleNameForm" class="form-control" ng-model="basicPeople.name">
+   </div>
+  </fluid-subcolumn>
+
+  <fluid-subcolumn  header="Email" name="email">
+  <div class="column-row">
+  {{basicPeople.email}}
+  </div>
+  <div class="column-form">
+   <label class="control-label" for="basicTablePeopleEmailForm">Email</label>
+   <input id="basicTablePeopleEmailForm" class="form-control" ng-model="basicPeople.email">
+  </div>
+  </fluid-subcolumn>
+
+</fluid-subtable>
+                        </escape>
+                        </code></pre>
+                    </div>
+                </div>
+
+
+                <ul>
+                    <li>Sub Table with Lookup</li>
+                </ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidSubTableLookupPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidSubTableLookupHtml">Html</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidSubTableLookupPreview" class="tab-pane fade in active">
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <div><b>peopleList</b></div>
+                            <code>
+
+                                {{peopleList2}}
+
+                            </code>
+
+                        </div>
+
+                        <div></div>
+                        <div class="form-group">
+                            <fluid-subtable primary label="People" ng-model="peopleList2" key-var="basicPeople2" factory="People">
+                                <fluid-subcolumn  header="Name" name="name">
+                                    <div class="column-row">
+                                        {{basicPeople2.name}}
+                                    </div>
+                                    <div class="column-form">
+                                        <label class="control-label" for="basicTablePeopleNameForm2">Name</label>
+                                        <input id="basicTablePeopleNameForm2" class="form-control" ng-model="basicPeople2.name">
+                                    </div>
+                                </fluid-subcolumn>
+                                <fluid-subcolumn  header="Email" name="email">
+                                    <div class="column-row">
+                                        {{basicPeople2.email}}
+                                    </div>
+                                    <div class="column-form">
+                                        <label class="control-label" for="basicTablePeopleEmailForm2">Email</label>
+                                        <input id="basicTablePeopleEmailForm2" class="form-control" ng-model="basicPeople2.email">
+                                    </div>
+                                </fluid-subcolumn>
+                            </fluid-subtable>
+                        </div>
+
+                    </div>
+                    <div id="fluidSubTableLookupHtml" class="tab-pane fade">
+                        <pre><code><escape>
+ <fluid-subtable primary label="People" ng-model="peopleList2" key-var="basicPeople2" factory="People">
+  <fluid-subcolumn  header="Name" name="name">
+    <div class="column-row">
+      {{basicPeople2.name}}
+    </div>
+   <div class="column-form">
+   <label class="control-label" for="basicTablePeopleNameForm2">Name</label>
+    <input id="basicTablePeopleNameForm2" class="form-control" ng-model="basicPeople2.name">
+   </div>
+  </fluid-subcolumn>
+
+   <fluid-subcolumn  header="Email" name="email">
+    <div class="column-row">
+    {{basicPeople2.email}}
+    </div>
+    <div class="column-form">
+    <label class="control-label" for="basicTablePeopleEmailForm2">Email</label>
+    <input id="basicTablePeopleEmailForm2" class="form-control" ng-model="basicPeople2.email">
+    </div>
+    </fluid-subcolumn>
+
+ </fluid-subtable>
+                            </escape>
+                        </code></pre>
+                    </div>
+                </div>
+
+
+                <table class="panel-body table table-bordered">
+                    <thead class="bg-primary">
+                    <th class="text-center">Attribute</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Description</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>show-clear</td>
+                        <td>boolean|default:true</td>
+                        <td>Show/hide the clear button</td>
+                    </tr>
+                    <tr>
+                        <td>show-add</td>
+                        <td>boolean|default:true</td>
+                        <td>Show/hide the add button</td>
+                    </tr>
+                    <tr>
+                        <td>label</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the label for the modal</td>
+                    </tr>
+                    <tr>
+                        <td>factory</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the factory to use as the selection values</td>
+                    </tr>
+                    <tr>
+                        <td>source-url</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the url of async data to use as the selection values</td>
+                    </tr>
+                    <tr>
+                        <td>method</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the http method to use for the source-url</td>
+                    </tr>
+                    <tr>
+                        <td>key-var</td>
+                        <td>String|default:none|required:true</td>
+                        <td>Specifies the variable name</td>
+                    </tr>
+                    <tr>
+                        <td>lookup-template</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the ng-template to use</td>
+                    </tr>
+                    <tr>
+                        <td>header (fluid-subcolumn)</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the header for table column</td>
+                    </tr>
+                    <tr>
+                        <td>name (fluid-subcolumn)</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the field name for table column</td>
+                    </tr>
+                    </tbody>
+                </table>
+
 
 
                 <h2>
                     <a id="fluid-pagination" class="anchor" href="#fluid-lookup" aria-hidden="true"><span
-                            class="octicon octicon-link"></span></a>fluid-pagination
+                            class="octicon octicon-link"></span></a>fluid-pagination - paginates async data
                 </h2>
 
+                <ul>
+                    <li>Works only with asynchronous data</li>
+                    <li>
+                        Can be done as simple as enclosing a tag with &lt;fluid-pagination&gt;&lt;/fluid-pagination&gt;
+                    </li>
+                </ul>
+                <pre><code><escape>
+ <fluid-pagination limit="25" source-url="/data/async/sample"
+   method="get" ng-model="paginatedList">
+
+<fluid-subtable key-var="keyVarPag" ng-model="paginatedList"></fluid-subtable>
+
+ </fluid-pagination>
+                    </escape>
+                </code></pre>
+
+                <ul>
+                    <li>Request contains start,limit,field,sort</li>
+                    <li>Response should have length, data </li>
+                </ul>
+
+
+                <table class="panel-body table table-bordered">
+                    <thead class="bg-primary">
+                    <th class="text-center">Field</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Description</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>start</td>
+                        <td>Integer|default:0</td>
+                        <td>Specifies the start index</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>Integer|default:none</td>
+                        <td>Specifies the size</td>
+                    </tr>
+                    <tr>
+                        <td>field</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the field name to sort from the data</td>
+                    </tr>
+                    <tr>
+                        <td>sort</td>
+                        <td>String|'asc'|'desc'|default:none</td>
+                        <td>Specifies the sort order</td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>Array</td>
+                        <td>Return data</td>
+                    </tr>
+                    <tr>
+                        <td>length</td>
+                        <td>Integer</td>
+                        <td>Total length of data</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="panel-body table table-bordered">
+                    <thead class="bg-primary">
+                    <th class="text-center">Attribute</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Description</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>source-url</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the url of async data</td>
+                    </tr>
+                    <tr>
+                        <td>method</td>
+                        <td>String|default:none</td>
+                        <td>Specifies the http method to use for the source-url</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>Integer|default:none</td>
+                        <td>Specifies the size of return data</td>
+                    </tr>
+                    </tbody>
+                </table>
             </h1>
 
             <h1>
@@ -651,11 +950,11 @@
         </aside>
     </div>
 </div>
-<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
-<script type="text/javascript" src="bower_components/fluid-web-components/dist/js/web-components.min.js"></script>
+<script type="text/javascript" src="bower_components/fluid-web-components/dist/js/web-components.js"></script>
 <script type="text/javascript" src="javascripts/main.js"></script>
 </body>
 </html>
