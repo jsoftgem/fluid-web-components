@@ -12,4 +12,31 @@ angular.module("mainApp", ["fluid.webComponents"])
             {name: "Allen Shaw", email: "allen_shaw@jsofttechnologies.com", age: 25},
             {name: "Calcium Kid", email: "calcium_kid@jsofttechnologies.com", age: 35}
         ]
-    });
+    }).factory("Animals", function () {
+        return [
+            {name: "Dog", img: "images/animals/dog.jpg"},
+            {name: "Cat", img: "images/animals/cat.jpg"},
+            {name: "Bear", img: "images/animals/bear.jpg"},
+            {name: "Wolf", img: "images/animals/wolf.jpg"},
+            {name: "Lion", img: "images/animals/lion.jpg"},
+            {name: "Horse", img: "images/animals/horse.jpg"}
+        ]
+    }).directive("escape", [function () {
+
+        return {
+            restrict: "AE",
+            terminal: true,
+            link: function (scope, element, attr) {
+                var html = element.html();
+                html = html.replace(/&/g, "&amp;");
+                html = html.replace(/</g, "&lt;");
+                html = html.replace(/>/g, "&gt;");
+                console.debug("html",html);
+                var p = $("<p>");
+                p.html(html);
+                element.replaceWith(p);
+
+            }
+        }
+
+    }]);

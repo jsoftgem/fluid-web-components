@@ -102,7 +102,8 @@
                         class="octicon octicon-link"></span></a>Components
                 <h2>
                     <a id="fluid-select" class="anchor" href="#fluid-select" aria-hidden="true"><span
-                            class="octicon octicon-link"></span></a>fluid-select - a simplified drop-down component for AngularJS
+                            class="octicon octicon-link"></span></a>fluid-select - a simplified drop-down component for
+                    AngularJS
                 </h2>
 
                 <ul>
@@ -113,7 +114,7 @@
                     <li><a data-toggle="tab" href="#fluidSelectValuesHtml">Html</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="fluidSelectValuesPreview" class="tab-pane fade in active">
+                    <div id="fluidSelectValuesPreview" class="tab-pane fade in active"  style="background: whitesmoke">
                         <div class="form-group">
                             <fluid-select label="Size" values="25,50,75,100" ng-model="sizeModel"></fluid-select>
                         </div>
@@ -137,7 +138,7 @@
                     <li><a data-toggle="tab" href="#fluidSelectFactoryJS">JS</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="fluidSelectFactoryPreview" class="tab-pane fade in active">
+                    <div id="fluidSelectFactoryPreview" class="tab-pane fade in active"  style="background: whitesmoke">
                         <div class="form-group">
                             <fluid-select label="People" factory="People" ng-model="peopleModel"
                                           field-label="name"></fluid-select>
@@ -177,7 +178,7 @@
                     <li><a data-toggle="tab" href="#fluidSelectJSONHtml">JSON</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="fluidSelectAsyncPreview" class="tab-pane fade in active">
+                    <div id="fluidSelectAsyncPreview" class="tab-pane fade in active"  style="background: whitesmoke">
                         <div class="form-group">
                             <fluid-select label="Categories" ng-model="categoryModel"
                                           source-url="/fluid-web-components/categories.json" field-label="category"
@@ -235,7 +236,7 @@
                     <li><a data-toggle="tab" href="#fluidSelectBrandHtml">Html</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="fluidSelectBrandPreview" class="tab-pane fade in active">
+                    <div id="fluidSelectBrandPreview" class="tab-pane fade in active"  style="background: whitesmoke">
                         <div class="form-group">
                             <fluid-select label="Size - primary" values="25,50,75,100" ng-model="sizeModel1"
                                           primary></fluid-select>
@@ -328,9 +329,97 @@
 
 
                 <ul>
-                    <li>Basic</li>
+                    <li>Using grid selection</li>
                 </ul>
 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#fluidLookupGridPreview">Preview</a></li>
+                    <li><a data-toggle="tab" href="#fluidLookupGridlHtml">Html</a></li>
+                    <li><a data-toggle="tab" href="#fluidLookupGridJS">JS</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="fluidLookupGridPreview" class="tab-pane fade in active" style="background: whitesmoke">
+                        <div class="form-group" style="margin: 10px">
+                            <button type="button" info class="btn" label="Animals" ng-model="lookupSelectedAnimal"
+                                    fluid-lookup
+                                    factory="Animals">
+                                Animal
+                                <i class="fa fa-search"></i>
+                                <fluid-lookup-grid key-var="animalGrid">
+                                    <div style="width: 185px;height:150px">
+                                        <div class="bg-info"><b>{{animalGrid.name}}</b></div>
+                                        <div></div>
+                                        <div>
+                                            <img ng-src="{{animalGrid.img}}" height="125" width="175">
+                                        </div>
+                                    </div>
+                                </fluid-lookup-grid>
+                            </button>
+
+                            <div ng-if="lookupSelectedAnimal">
+                                <div style="padding:15px 0;">
+                                    <div><b>{{lookupSelectedAnimal.name}}</b></div>
+                                    <div></div>
+                                    <div>
+                                        <img ng-src="{{lookupSelectedAnimal.img}}" height="125" width="175">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="fluidLookupGridlHtml" class="tab-pane fade">
+                        <pre>
+                    <code>
+                        <escape>
+       <div class="form-group" style="margin: 10px">
+
+           <button type="button" info class="btn" label="Animals"
+                   ng-model="lookupSelectedAnimal" fluid-lookup factory="Animals">
+               Animal <i class="fa fa-search"></i>
+              <fluid-lookup-grid key-var="animalGrid">
+              <div style="width: 185px;height:150px">
+              <div class="bg-info"><b>{{animalGrid.name}}</b></div>
+              <div></div>
+              <div><img ng-src="{{animalGrid.img}}" height="125" width="175"></div>
+              </div>
+              </fluid-lookup-grid>
+           </button>
+
+
+           <div ng-if="lookupSelectedAnimal">
+             <div style="padding:15px 0;">
+              <div><b>{{lookupSelectedAnimal.name}}</b></div>
+              <div></div>
+              <div><img ng-src="{{lookupSelectedAnimal.img}}" height="125" width="175"></div>
+             </div>
+           </div>
+       </div>
+                        </escape>
+                    </code>
+                         </pre>
+                    </div>
+                    <div id="fluidLookupGridJS" class="tab-pane fade">
+                        <pre>
+                            <code>
+    angular.module("mainApp", ["fluid.webComponents"])
+         .factory("Animals", function () {
+          return [
+            {name: "Dog", img: "images/animals/dog.jpg"},
+            {name: "Cat", img: "images/animals/cat.jpg"},
+            {name: "Bear", img: "images/animals/bear.jpg"},
+            {name: "Wolf", img: "images/animals/wolf.jpg"},
+            {name: "Lion", img: "images/animals/lion.jpg"},
+            {name: "Horse", img: "images/animals/horse.jpg"}
+            ]});
+                            </code>
+                        </pre>
+
+                    </div>
+                </div>
+
+
+                <h2>
                     <a id="fluid-subtable" class="anchor" href="#fluid-subtable" aria-hidden="true"><span
                             class="octicon octicon-link"></span></a>fluid-subtable
                 </h2>
