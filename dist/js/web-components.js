@@ -272,7 +272,7 @@ function getModal(label) {
     return modal;
 }
 ;/**
- * TODO: fluid-pagination creates size limit to specified ng-model and creates pagination.
+ *  fluid-pagination creates size limit to specified ng-model and creates pagination.
  *
  * request could have the following properties:
  *  start,limit, sort,field
@@ -1432,18 +1432,6 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
             }
         }
     }])
-    .controller("sampleCtrl", ["$scope", function (scope) {
-        scope.taskSize = 5;
-        scope.year = 1957;
-        scope.sample = "rer";
-        scope.change = function (item) {
-            0;
-        }
-        scope.onLookUp = function (item, $event) {
-            scope.selectedSample = item;
-            0
-        }
-    }])
     .service("fluidClient", [function () {
 
         this.getKeyVar = function (keyVar) {
@@ -1462,53 +1450,7 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         };
 
         return this;
-    }])
-    .factory("samples", function () {
-
-        return [{
-            "name": "Jerico",
-            year: 1991,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }, {
-            "name": "Pogi",
-            year: 1991,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }, {
-            "name": "John Doe",
-            year: 1978,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }, {
-            "name": "James Hitler",
-            year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }, {
-            "name": "Anita",
-            year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }, {
-            "name": "Calcium Kid",
-            year: 1998,
-            list: [{"name": "Someone Else", "year": "1976"}, {
-                "name": "Someone Else",
-                "year": "1976"
-            }, {"name": "Someone Else", "year": "1976"}]
-        }];
-    });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
+    }]);;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
 
 angular.module("templates/fluid-select.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-select.html",
