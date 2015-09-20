@@ -42,7 +42,7 @@ bower install -g fluid-web-components
 ### Documentation
 
 ### Authors and Contributors
-[Jerico de Guzman](@https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351) - Senior Software Engineer.
+[Jerico de Guzman](https://ph.linkedin.com/pub/jerico-de-guzman/57/266/351) - Senior Software Engineer.
 
 ### Support or Contact
 jerico@jsofttechnologies.com
