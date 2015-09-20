@@ -40,7 +40,9 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         keyVar = fc.getKeyVar(attr.keyVar);
 
                         var bootstrapBrand = getBootstrapBrand(attr);
-                        fluidLookupButton.attr("ng-model", keyVar + "_lookup").attr(bootstrapBrand, "");
+                        if (bootstrapBrand) {
+                            fluidLookupButton.attr("ng-model", keyVar + "_lookup").attr(bootstrapBrand, "");
+                        }
                         fluidLookupButton.attr("title", "Look " + (attr.label ? "for " + attr.label : "up"));
 
 
@@ -119,7 +121,9 @@ angular.module("fluid.webComponents.fluidSubTable", [])
 
                         console.debug("fluidSubtable.columns", columns);
                         var modal = getSubTableModal(attr.label);
-                        modal.$modal.attr(bootstrapBrand, "");
+                        if (bootstrapBrand) {
+                            modal.$modal.attr(bootstrapBrand, "");
+                        }
                         setTable(element, keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
                         transclude.remove();
                     }
@@ -280,6 +284,9 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     eraseButton.unbind("click");
     eraseButton.click(function () {
+        if (scope[modeloc]) {
+            scope[modeloc] = [];
+        }
         ngModel.$setViewValue([]);
         timeout(function () {
             scope.$apply();
@@ -440,7 +447,7 @@ function getSubTableModal(label) {
 
     var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog'>");
     var $dialog = $("<div class='modal-dialog'>").appendTo($modal);
-    var $modalContent = $("<form class='modal-content' role='form'>").appendTo($dialog);
+    var $modalContent = $("<form class='modal-content' role='form'>").css("padding", 0).appendTo($dialog);
     var $modalHeader = $("<div class='modal-header'>").appendTo($modalContent);
     $("<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>").appendTo($modalHeader);
     $("<h4 class='modal-title'><b>" + label + "</b></h4>").appendTo($modalHeader);
