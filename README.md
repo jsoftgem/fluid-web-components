@@ -1,5 +1,5 @@
 # What is Fluid-web-components?
-Fluid-web-components is a simple web application component library written in [AngularJS](https://angularjs.org/) and [Bootstrap](http://getbootstrap.com/).
+Fluid-web-components is a simple web application component written in [AngularJS](https://angularjs.org/) and [Bootstrap](http://getbootstrap.com/).
 
 ## Goal
 - To provide the basic components used in web applications like, tables, pagination, drop-down, etc., with simplified options and tags.
