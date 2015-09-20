@@ -17,6 +17,7 @@
                           source-url="http://localhost:8080/rex-services/services/flow_task_query/sample_tasks">
             <fluid-subtable show-add="false" show-clear="false" success key-var="task" label="Sample Tasks"
                             ng-model="taskList"
+                            source-url="http://localhost:8080/rex-services/services/flow_task_query/get_all"
                             lookup-template="subtable.template">
                 <fluid-subcolumn name="glyph" header="Glyph">
                     <div class="column-row">

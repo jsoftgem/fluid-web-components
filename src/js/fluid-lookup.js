@@ -108,7 +108,11 @@ angular.module("fluid.webComponents.fluidLookup", [])
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
                 keyVar = grid.keyVar;
-                var selectorGrid = $("<div>").attr(options.bootstrapBrand, "").addClass("grid").attr("ng-repeat", grid.keyVar + " in " + grid.keyVar + "_data").appendTo(modalBody);
+                var tempSearchDiv = $("<div class='form-group'>").appendTo(modalBody);
+                modalBody.attr("ng-init", keyVar + "_search=undefined");
+                $("<input class='form-control'>").attr("ng-model", keyVar + "_search").attr("placeholder", "Search " + label.toLowerCase())
+                    .appendTo(tempSearchDiv);
+                var selectorGrid = $("<div>").attr(options.bootstrapBrand, "").addClass("grid").attr("ng-repeat", grid.keyVar + " in " + grid.keyVar + "_data | filter: " + keyVar + "_search").appendTo(modalBody);
                 selectorGrid.html(grid.html);
                 modalBody.delegate("div.grid", "click", function ($event) {
                     if (ngModel) {
@@ -131,6 +135,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 var table = JSON.parse(source.attr("table"));
                 keyVar = table.keyVar;
                 var tableBd = $("<table class='modal-body table lookup-table table-hover table-striped table-condensed'>").attr(options.bootstrapBrand, "").appendTo(modalBody);
+
                 tableBd.delegate("tr", "click", function ($event) {
                     if (ngModel) {
                         console.debug("fluid-lookup.ngModel", ngModel);
@@ -145,7 +150,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     modal.modal("hide");
                 });
                 var thead = $("<thead>").appendTo(tableBd);
-                var tr = $("<tr>").attr("ng-repeat", table.keyVar + " in " + table.keyVar + "_data").appendTo(tableBd);
+                var tr = $("<tr>").attr("ng-repeat", table.keyVar + " in " + table.keyVar + "_data | filter: " + keyVar + "_search").appendTo(tableBd);
                 $(table.html).each(function () {
                     var col = $(this)
                     if (col.hasClass("column-row")) {
@@ -155,7 +160,13 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     }
                     console.debug("fluid-select.table.col", col);
                 });
-                modalBody.replaceWith(tableBd);
+
+                var tempSearchDiv = $("<div class='form-group'>").appendTo(modalBody);
+                modalBody.attr("ng-init", keyVar + "_search=undefined");
+                $("<input class='form-control'>").attr("ng-model", keyVar + "_search").attr("placeholder", "Search " + label.toLowerCase())
+                    .appendTo(tempSearchDiv);
+
+                tableBd.appendTo(modalBody);
             }
 
             console.debug("lookupFactory.modalBody", modalBody.html());
