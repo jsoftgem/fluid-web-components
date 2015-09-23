@@ -239,3 +239,7 @@ fluid-subtable[danger] table th.fluid-sort a {
   color: white;
   background: #f0ad4e;
 }
+
+.fluid-sort:hover {
+  background: whitesmoke;
+}

@@ -93,14 +93,20 @@ module.exports = function (grunt) {
                 }
             },
             watch: {
+                scss: {
+                    files: ["src/sass/**/*.scss"],
+                    tasks: ['sass', 'concat_css', 'cssmin'],
+                    options: {
+                        atBegin: true
+                    }
+                },
                 dev: {
                     files: ['Gruntfile.js', 'src/js/**/*.js', 'src/templates/**/*.html'],
                     tasks: ['jshint', 'karma:unit', 'html2js:dist', 'concat:dist', 'clean:temp'],
                     options: {
                         atBegin: true
                     }
-                }
-                ,
+                } ,
                 min: {
                     files: ['Gruntfile.js', 'app/*.js', '*.html'],
                     tasks: ['jshint', 'karma:unit', 'html2js:dist', 'concat:dist', 'clean:temp', 'uglify:dist'],
@@ -164,7 +170,7 @@ module.exports = function (grunt) {
      grunt.registerTask('package', ['bower', 'jshint', 'karma:unit', 'html2js:dist', 'concat:dist', 'uglify:dist',
      'clean:temp', 'compress:dist']);*/
     grunt.registerTask('dev-package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
-        'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin']);
+        'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin','watch:scss']);
     grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'strip', 'uglify:dist',
         'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin']);
 }
