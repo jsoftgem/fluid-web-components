@@ -64,7 +64,54 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
 
         return this;
     }])
-    .factory("samples", function () {
+    .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
+
+        var fluidIterator = function (values) {
+            var q = $q.defer();
+            var array = values;
+            var length = array.length;
+            var index = 0;
+
+            function hasNext() {
+                return index < length;
+            }
+
+
+            function traverse(nextCallback) {
+                var value = array[index];
+                nextCallback(value, index,
+                    function () {
+                        index++;
+                        if (hasNext()) {
+                            return traverse(nextCallback);
+                        } else {
+                            index--;
+                            q.resolve({index: index, data: array[index]});
+                        }
+                    }, function () {
+                        q.resolve({index: index, data: array[index]});
+                    });
+
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+
+            return {
+                next: next, length: length
+            };
+        };
+
+        return fluidIterator;
+    }]).
+    factory("samples", function () {
 
         return [{
             "name": "Jerico",

@@ -906,6 +906,8 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         var modal = getSubTableModal(attr.label);
                         if (bootstrapBrand) {
                             modal.$modal.attr(bootstrapBrand, "");
+                            element.find("button.toggle-columns").attr(bootstrapBrand, "");
+                            c(element.find("button.toggle-columns"))(scope);
                         }
                         setTable(element, keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
                         transclude.remove();
@@ -954,6 +956,12 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         column.sort = scope.$eval(attr.sort);
                     }
 
+                    if (attr.toggle) {
+                        column.toggle = attr.toggle === "true";
+                    } else {
+                        column.toggle = true;
+                    }
+
                     console.debug("fluidSubcolumn.element", element[0]);
                     column.row = element.find(".column-row").html();
                     var form = element.find(".column-form").html();
@@ -972,6 +980,8 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     var createButton = element.find("button.create");
     var eraseButton = element.find("button.delete");
+    var toggleColumnsButton = element.find("button.toggle-columns");
+    var toggleColumnsList = element.find("ul.toggle-columns");
     var sort = undefined;
     var fieldSorted = undefined;
     var modeloc = keyVar + "_oc";
@@ -1195,9 +1205,12 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     });
 
+    var columnToggles = 0;
+
     for (var i = 0; i < columns.length; i++) {
         var col = columns[i];
         var td = $("<td>");
+        td.attr("ng-if", "!" + keyVar + "_toggled_" + col.name);
         if (/<[a-z][\s\S]*>/i.test(col.row)) {
             $(col.row).appendTo(td);
         } else {
@@ -1210,10 +1223,48 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         $("<a href='#'>").appendTo(th);
         td.appendTo(tr);
-        $(col.form).appendTo(modal.body);
-        console.debug("subColumn.col.form", col.form);
-        console.debug("subColumn.createdTd", td);
 
+        $(col.form).appendTo(modal.body);
+
+        if (col.toggle === true) {
+            var tl = $("<li>").appendTo(toggleColumnsList)
+                .attr("column-index", i)
+                .attr("column-name", col.name)
+            var a = $("<a>").attr("href", "#")
+                .appendTo(tl).html(col.header);
+
+            $("<input>").attr("type", "checkbox")
+                .prop("checked", true)
+                .addClass("pull-right")
+                .appendTo(a).unbind("click");
+            columnToggles++;
+        }
+        console.debug("toggle-columns.col", col);
+
+
+    }
+
+    toggleColumnsList.delegate("li a input", "click", function (event) {
+        var li = $(this).parent().parent();
+        var checkbox = $(this);
+        var columnIndex = li.attr("column-index");
+        var columnName = li.attr("column-name");
+        var columnToggled = li.attr("column-toggled");
+        var toggled = !checkbox.prop("checked");
+        li.attr("column-toggled", toggled);
+        thead.find("th:eq(" + columnIndex + ")").toggleClass("hidden");
+        scope[keyVar + "_toggled_" + columnName + ""] = toggled;
+        timeout(function () {
+            scope.$apply();
+        });
+        console.debug("toggle-columns.columnToggled", columnToggled);
+        console.debug("toggle-columns.columnName", columnName);
+        console.debug("toggle-columns.columnIndex", columnIndex);
+
+    });
+
+    if (columnToggles === 0) {
+        toggleColumnsButton.remove();
     }
 
     tr.appendTo(table);
@@ -1228,7 +1279,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
 function getSubTableModal(label) {
 
-    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog'>");
+    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog' data-backdrop='false'>");
     var $dialog = $("<div class='modal-dialog'>").appendTo($modal);
     var $modalContent = $("<form class='modal-content' role='form'>").css("padding", 0).appendTo($dialog);
     var $modalHeader = $("<div class='modal-header'>").appendTo($modalContent);
@@ -1470,7 +1521,54 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
 
         return this;
     }])
-    .factory("samples", function () {
+    .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
+
+        var fluidIterator = function (values) {
+            var q = $q.defer();
+            var array = values;
+            var length = array.length;
+            var index = 0;
+
+            function hasNext() {
+                return index < length;
+            }
+
+
+            function traverse(nextCallback) {
+                var value = array[index];
+                nextCallback(value, index,
+                    function () {
+                        index++;
+                        if (hasNext()) {
+                            return traverse(nextCallback);
+                        } else {
+                            index--;
+                            q.resolve({index: index, data: array[index]});
+                        }
+                    }, function () {
+                        q.resolve({index: index, data: array[index]});
+                    });
+
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+
+            return {
+                next: next, length: length
+            };
+        };
+
+        return fluidIterator;
+    }]).
+    factory("samples", function () {
 
         return [{
             "name": "Jerico",
@@ -1524,5 +1622,5 @@ angular.module("templates/fluid-select.html", []).run(["$templateCache", functio
 
 angular.module("templates/fluid-subtable.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-subtable.html",
-    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><div class=\"panel-title fluid-table-panel-title\"><span><b class=\"fst-label\"></b></span> <span class=\"pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info create\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger delete\"><i class=\"fa fa-eraser\"></i></button> <button fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\"><i class=\"fa fa-search\"></i></button></span></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead></thead><tbody></tbody></table></div></div>");
+    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><div class=\"panel-title fluid-table-panel-title center-block\"><span class=\"hidden-xs hidden-sm\"><b class=\"fst-label\"></b></span> <span class=\"pull-right btn-group btn-group-lg\" role=\"group\"><button type=\"button\" class=\"btn btn-lg btn-info create\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger delete\"><i class=\"fa fa-eraser\"></i></button> <button fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\"><i class=\"fa fa-search\"></i></button><div class=\"btn-group btn-group-lg\" role=\"group\"><button class=\"btn toggle-columns\" data-toggle=\"dropdown\"><i class=\"fa fa-th-list\"></i> <span class=\"caret\"></span></button><ul class=\"dropdown-menu dropdown-menu-right toggle-columns\"></ul></div></span></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead></thead><tbody></tbody></table></div></div>");
 }]);

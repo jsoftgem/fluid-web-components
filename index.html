@@ -11,14 +11,12 @@
 <body ng-controller="sampleCtrl as sample">
 <div class="container" style="margin-top:50px">
     <div class="form-group">
-        <fluid-select info class="pull-right" values="5,10,15,20"
-                      label="Size" ng-model="taskSize"></fluid-select>
-        <fluid-pagination ng-model="taskList" limit="taskSize" method="get"
-                          source-url="http://localhost:8080/rex-services/services/flow_task_query/sample_tasks">
-            <fluid-subtable show-clear="false" success key-var="task" label="Sample Tasks"
-                            ng-model="taskList"
-                            source-url="http://localhost:8080/rex-services/services/flow_task_query/get_all"
-                            lookup-template="subtable.template">
+        <!-- <fluid-select info class="pull-right" values="5,10,15,20"
+                       label="Size" ng-model="taskSize"></fluid-select>-->
+        <fluid-pagination ng-model="taskList" limit="10" method="get"
+                          source-url="http://localhost:9080/rex-services/services/flow_task_query/sample_tasks">
+            <fluid-subtable success key-var="task" label="Sample Tasks" show-clear="false"
+                            ng-model="taskList" show-add="false">
                 <fluid-subcolumn name="glyph" header="Glyph">
                     <div class="column-row">
                         <i ng-class="task.glyph"></i>
@@ -37,7 +35,7 @@
                     </div>
                 </fluid-subcolumn>
 
-                <fluid-subcolumn sort="false" name="pages" header="Pages">
+                <fluid-subcolumn name="pages" header="Pages">
                     <div class="column-row">
                         <ul class="list-group" style="z-index: 0">
                             <li class="list-group-item" ng-repeat="page in task.pages">
