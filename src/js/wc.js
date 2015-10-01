@@ -33,7 +33,7 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
             }
         }
     }])
-    .controller("sampleCtrl", ["$scope", function (scope) {
+    .controller("sampleCtrl", ["$scope", "FluidAsyncIterator", function (scope, FluidAsyncIterator) {
         scope.taskSize = 5;
         scope.year = 1957;
         scope.sample = "rer";
@@ -44,6 +44,17 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
             scope.selectedSample = item;
             console.debug("wc.onLookUp", $event)
         }
+
+
+        var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
+        iterator.setEndCallbackOnly(true);
+        iterator.next(function (value, index, proceed) {
+            console.debug("iterator-value", value);
+            console.debug("iterator-index", index);
+            proceed();
+        });
+
+
     }])
     .service("fluidClient", [function () {
 
@@ -67,6 +78,7 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
     .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
 
         var fluidIterator = function (values) {
+            var endOnly = false;
             var q = $q.defer();
             var array = values;
             var length = array.length;
@@ -76,20 +88,33 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
                 return index < length;
             }
 
-
             function traverse(nextCallback) {
-                var value = array[index];
+                var value = undefined;
+                if (index < array.length) {
+                    value = array[index];
+                } else {
+                    index--;
+                }
+
                 nextCallback(value, index,
-                    function () {
+                    function (timeout) {
                         index++;
                         if (hasNext()) {
-                            return traverse(nextCallback);
+                            t(function () {
+                                traverse(nextCallback);
+                            }, timeout);
                         } else {
-                            index--;
-                            q.resolve({index: index, data: array[index]});
+                            if (!endOnly) {
+                                index--;
+                                q.resolve({index: index, data: array[index]});
+                            } else {
+                                t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            }
                         }
-                    }, function () {
-                        q.resolve({index: index, data: array[index]});
+                    }, function (data) {
+                        q.resolve({index: index, data: data ? data : array[index]});
                     });
 
             }
@@ -103,15 +128,96 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
                 return q.promise;
             }
 
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
 
             return {
-                next: next, length: length
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
             };
         };
 
         return fluidIterator;
-    }]).
-    factory("samples", function () {
+    }])
+    .factory("FluidAsyncIterator", ["$http", "$q", "$timeout", function ($h, $q, $t) {
+
+        var fluidAsycnIterator = function (url, method) {
+
+            var endOnly = false;
+            var q = $q.defer();
+            var length = 0;
+            var index = 0;
+            var method = method ? method : "GET";
+
+
+            function hasNext() {
+                return index < length;
+            }
+
+
+            function query() {
+                return $h({
+                    url: url, method: method, params: {index: index}
+                });
+            }
+
+            function traverse(nextCallback) {
+                var value = undefined;
+
+                query().success(function (data) {
+                    length = data.length;
+                    if (index < length) {
+                        value = data.value;
+                    } else {
+                        index--;
+                    }
+
+                    nextCallback(value, index,
+                        function (timeout) {
+                            index++;
+                            if (hasNext()) {
+                                $t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            } else {
+                                if (!endOnly) {
+                                    index--;
+                                    q.resolve({index: index, data: value});
+                                } else {
+                                    $t(function () {
+                                        traverse(nextCallback);
+                                    }, timeout);
+                                }
+                            }
+                        }, function (data) {
+                            q.resolve({index: index, data: data ? data : value});
+                        });
+                });
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
+
+            return {
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
+            };
+
+        };
+
+
+        return fluidAsycnIterator;
+    }])
+    .factory("samples", function () {
 
         return [{
             "name": "Jerico",
