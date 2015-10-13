@@ -21,16 +21,11 @@ module.exports = function (grunt) {
                 all: ['Gruntfile.js', 'src/js/**/*.js', '**/*.js']
             },
             karma: {
-                options: {
-                    configFile: 'test/config/karma.conf.js'
-                },
                 unit: {
-                    singleRun: true
-                },
-
-                continuous: {
-                    singleRun: false,
-                    autoWatch: true
+                    options: {
+                        configFile: 'karma.conf.js',
+                        autoWatch: true
+                    }
                 }
             },
             html2js: {
@@ -171,6 +166,8 @@ module.exports = function (grunt) {
      'clean:temp', 'compress:dist']);*/
     grunt.registerTask('dev-package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
         'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin', 'watch:dev']);
+    grunt.registerTask('test-package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
+        'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin', 'karma:unit']);
     grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'strip', 'uglify:dist',
         'clean:temp', 'compress:dist', 'sass', 'concat_css', 'cssmin']);
 }

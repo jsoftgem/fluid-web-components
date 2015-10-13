@@ -12,8 +12,8 @@ angular.module("fluid.webComponents.fluidCache", [])
         };
         this.putCache = function (key, data) {
             tc.put(key, data);
-            console.debug("fluidCache.service.put.key", key);
-            console.debug("fluidCache.service.put.data", data);
+            0;
+            0;
         };
         return this;
     }])
@@ -21,7 +21,7 @@ angular.module("fluid.webComponents.fluidCache", [])
 
         return {
             "response": function (response) {
-                console.debug("fluidCache.injector.response", response);
+                0;
                 if (fs.getCache(response.config.url) === false) {
                     fs.putCache(response.config.url, response.data);
                 }
@@ -36,7 +36,7 @@ angular.module("fluid.webComponents.fluidCache", [])
 
                 element.ready(function () {
                     var obj = scope.$$childHead.$eval(attr.fluidCache);
-                    console.debug("fluidCache.cache", obj);
+                    0;
                     if (obj) {
                         fs.putCache(obj, false);
                     }
@@ -57,11 +57,11 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 if (attr.method) {
                     method = attr.method;
                 }
-                console.debug("fluid-lookup.ngModel", ngModel);
+                0;
                 element.unbind("click");
 
                 var bootstrapBrand = getBootstrapBrand(attr);
-                console.debug("fluidLookup.bootstrapBrand.before", bootstrapBrand);
+                0;
                 element.bind("click", function (e) {
                     lookUp.open({
                         bootstrapBrand: bootstrapBrand,
@@ -151,7 +151,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
             var keyVar = "";
             var modalBody = modal.find(".modal-body");
             var ngModel = options.ngModel;
-            console.debug("fluidLookup.bootstrapBrand", bootstrapBrand);
+            0;
             if (source.attr("lookup-type") === "grid") {
                 var grid = JSON.parse(source.attr("grid"));
                 keyVar = grid.keyVar;
@@ -163,10 +163,10 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 selectorGrid.html(grid.html);
                 modalBody.delegate("div.grid", "click", function ($event) {
                     if (ngModel) {
-                        console.debug("fluid-lookup.ngModel", ngModel);
+                        0;
                         var indexScope = angular.element($event.target).scope();
                         var item = indexScope[grid.keyVar];
-                        console.debug("fluid-lookup.selectedItem", item);
+                        0;
                         scope[ngModel] = item;
                         t(function () {
                             scope.$apply();
@@ -185,10 +185,10 @@ angular.module("fluid.webComponents.fluidLookup", [])
 
                 tableBd.delegate("tr", "click", function ($event) {
                     if (ngModel) {
-                        console.debug("fluid-lookup.ngModel", ngModel);
+                        0;
                         var indexScope = angular.element($event.target).scope();
                         var item = indexScope[table.keyVar];
-                        console.debug("fluid-lookup.selectedItem", item);
+                        0;
                         scope[ngModel] = item;
                         t(function () {
                             scope.$apply();
@@ -205,7 +205,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
                         $("<th>").html(header).appendTo(thead);
                         $("<td>").html(col.html()).appendTo(tr);
                     }
-                    console.debug("fluid-select.table.col", col);
+                    0;
                 });
 
                 var tempSearchDiv = $("<div class='form-group'>").appendTo(modalBody);
@@ -216,7 +216,7 @@ angular.module("fluid.webComponents.fluidLookup", [])
                 tableBd.appendTo(modalBody);
             }
 
-            console.debug("lookupFactory.modalBody", modalBody.html());
+            0;
             c(modal.contents())(scope);
 
             if (sourceUrl) {
@@ -238,8 +238,8 @@ angular.module("fluid.webComponents.fluidLookup", [])
                     t(function () {
                         scope.$apply();
                     });
-                    console.debug("lookupFactory", scope.data);
-                    console.debug("lookupFactory.html", modal.html());
+                    0;
+                    0;
                     modal.modal("show");
                 });
 
@@ -305,7 +305,7 @@ angular.module("fluid.webComponents.fluidPagination", [])
             var sourceUrl = attr.sourceUrl;
             var method = attr.method;
             var paginate = new Paginate(sourceUrl, method);
-            console.debug("fluidPagination.paginate1", paginate);
+            0;
             var pageElement = pagination();
             pageElement.$pagination.prependTo(element);
             var createLinks = function (length) {
@@ -323,15 +323,15 @@ angular.module("fluid.webComponents.fluidPagination", [])
                     }
                     pageElement.ul.attr("max-page", pageCount);
                     var start = 0;
-                    console.debug("fluidPagination.pageCount", pageCount);
+                    0;
                     for (var i = 0; i < pageCount; i++) {
 
                         var size = limit;
                         if (i === pageCount - 1) {
                             size = lastIndex;
-                            console.debug("fluidPagination.lastIndex", size);
+                            0;
                         }
-                        console.debug("fluidPagination.size", size);
+                        0;
                         var li = $("<li>")
                             .attr("page", (i + 1))
                             .attr("start", start)
@@ -466,7 +466,7 @@ angular.module("fluid.webComponents.fluidPagination", [])
                             .removeClass("fa-sort-asc");
                     }
 
-                    console.debug("fluid-subtable.sorted", sort);
+                    0;
                     if (sort === undefined) {
                         sorter.toggleClass("fa fa-sort-desc");
                         sorter.attr("sort", "asc");
@@ -582,8 +582,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
             restrict: "AE",
             template: tc.get("templates/fluid-select.html"),
             link: function (scope, element, attr, ngModel) {
-                console.debug("ngModel", ngModel);
-                console.debug("scope", scope);
+                0;
+                0;
                 var method = "GET";
                 var sourceList = undefined;
                 var fwcLabel = element.find(".fwc-label");
@@ -634,7 +634,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         var li = $("<li>").addClass("fluid-select-item");
                         var a = $("<a>").attr("href", "#").addClass("morris-hover-point").text(new getValue(item, fieldLabel).value).appendTo(li);
                         a.click(function ($event) {
-                            console.debug("fluid-select.click", item);
+                            0;
                             var value = new getValue(item, fieldValue).value;
                             t(function () {
                                 ngModel.$setViewValue(value, $event);
@@ -902,7 +902,7 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                             fluidLookupButton.addClass("hidden");
                         }
 
-                        console.debug("fluidSubtable.columns", columns);
+                        0;
                         var modal = getSubTableModal(attr.label);
                         if (bootstrapBrand) {
                             modal.$modal.attr(bootstrapBrand, "");
@@ -962,11 +962,11 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         column.toggle = true;
                     }
 
-                    console.debug("fluidSubcolumn.element", element[0]);
+                    0;
                     column.row = element.find(".column-row").html();
                     var form = element.find(".column-form").html();
                     column.form = form;
-                    console.debug("fluidSubcolumn.column", column);
+                    0;
                     element.attr("column", JSON.stringify(column));
                     element.html("");
                 }
@@ -1118,7 +1118,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         var $index = modal.deleteButton.attr("index");
         removeItem($index);
         modal.$modal.modal("hide");
-        console.debug("$index", $index);
+        0;
     });
 
     var table = element.find("table");
@@ -1127,9 +1127,9 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     var tr = $("<tr>").attr("ng-repeat", keyVar + " in " + value + " track by $index");
 
     element.find("table." + keyVar).delegate("tr td", "click", function ($event) {
-        console.debug("fluidSubtable.tr", $(this));
+        0;
         var eventScope = angular.element($event.target).scope();
-        console.debug("fluidSubtable.eventScope.edit", eventScope);
+        0;
         modal.actionButton.text("Update");
         modal.actionButton.attr("index", eventScope.$index);
         modal.deleteButton.attr("index", eventScope.$index);
@@ -1158,7 +1158,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
 
 
-        console.debug("fluid-subtable.sorted", sort);
+        0;
         if (sort === undefined) {
             scope[keyVar + "_oc"] = ngModel.$viewValue;
             sorter.toggleClass("fa fa-sort-desc");
@@ -1184,7 +1184,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         } else if (sort === "desc") {
             sorted = true;
         }
-        console.debug("fluid-subtable.sorted", sorted);
+        0;
 
         var sortedArray = [];
 
@@ -1193,7 +1193,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
             sortedArray.sort = sort;
         } else {
             angular.copy(scope[modeloc], sortedArray);
-            console.debug("fluid-subtable.sortedArray_oc", sortedArray);
+            0;
         }
 
         ngModel.$setViewValue(sortedArray);
@@ -1239,7 +1239,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
                 .appendTo(a).unbind("click");
             columnToggles++;
         }
-        console.debug("toggle-columns.col", col);
+        0;
 
 
     }
@@ -1257,9 +1257,9 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         timeout(function () {
             scope.$apply();
         });
-        console.debug("toggle-columns.columnToggled", columnToggled);
-        console.debug("toggle-columns.columnName", columnName);
-        console.debug("toggle-columns.columnIndex", columnIndex);
+        0;
+        0;
+        0;
 
     });
 
@@ -1272,7 +1272,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
     timeout(function () {
         scope.$apply();
     });
-    console.debug("fluid-subtable.modal.contents", modal.$modal[0]);
+    0;
     compile(modal.$modal.contents())(scope);
     element.attr("table-loaded", true);
 }
@@ -1301,6 +1301,169 @@ function getSubTableModal(label) {
     }
 
 };/**
+ * Created by Jerico on 02/10/2015.
+ */
+angular.module("fluid.utils", [])
+    .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
+
+        var fluidIterator = function (values) {
+            var endOnly = false;
+            var q = $q.defer();
+            var array = values;
+            var length = array.length;
+            var index = 0;
+
+            function hasNext() {
+                return index < length;
+            }
+
+            function traverse(nextCallback) {
+                var value = undefined;
+                if (index < array.length) {
+                    value = array[index];
+                } else {
+                    index--;
+                }
+
+                nextCallback(value, index,
+                    function (timeout) {
+                        index++;
+                        if (hasNext()) {
+                            t(function () {
+                                traverse(nextCallback);
+                            }, timeout);
+                        } else {
+                            if (!endOnly) {
+                                index--;
+                                q.resolve({index: index, data: array[index]});
+                            } else {
+                                t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            }
+                        }
+                    }, function (data) {
+                        q.resolve({index: index, data: data ? data : array[index]});
+                    });
+
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
+
+            return {
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
+            };
+        };
+
+        return fluidIterator;
+    }])
+    .factory("FluidAsyncIterator", ["$http", "$q", "$timeout", function ($h, $q, $t) {
+        var fluidAsyncIterator = function (url, method) {
+
+            var endOnly = false;
+            var q = $q.defer();
+            var length = 0;
+            var index = 0;
+            var method = method ? method : "GET";
+
+
+            function hasNext() {
+                return index < length;
+            }
+
+
+            function query() {
+                return $h({
+                    url: url, method: method, params: {index: index}
+                });
+            }
+
+            function traverse(nextCallback) {
+                var value = undefined;
+
+                query().success(function (data) {
+                    length = data.length;
+                    if (index < length) {
+                        value = data.value;
+                    } else {
+                        index--;
+                    }
+
+                    nextCallback(value, index,
+                        function (timeout) {
+                            index++;
+                            if (hasNext()) {
+                                $t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            } else {
+                                if (!endOnly) {
+                                    index--;
+                                    q.resolve({index: index, data: value});
+                                } else {
+                                    $t(function () {
+                                        traverse(nextCallback);
+                                    }, timeout);
+                                }
+                            }
+                        }, function (data) {
+                            q.resolve({index: index, data: data ? data : value});
+                        });
+                }).error(function (err) {
+                    q.reject(err);
+                });
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
+
+            return {
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
+            };
+
+        };
+        return fluidAsyncIterator;
+    }])
+    .service("fluidClient", [function () {
+
+        this.getKeyVar = function (keyVar) {
+            if (!this.keyVars) {
+                this.keyVars = [];
+            }
+            if (this.keyVars[keyVar] != null) {
+                var keys = this.keyVars[keyVar];
+                keys++;
+                this.keyVars[keyVar] = keys;
+                return keyVar + "_" + keys;
+            } else {
+                this.keyVars[keyVar] = 0;
+                return keyVar;
+            }
+        };
+
+        return this;
+    }]);/**
  * Created by jerico on 9/16/15.
  */
 function getValue(object, field) {
@@ -1451,14 +1614,14 @@ angular.module("fluid.webComponents.bootstrap", [])
                     element.find(".modal").find(".modal-header").addClass("bg-primary");
                 } else if (element.hasClass("modal")) {
                     element.find("modal-header").addClass("bg-primary");
-                    console.debug("modal-header-primary");
+                    0;
                 }
             }
         }
     }]);;/**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -1495,184 +1658,21 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
         scope.year = 1957;
         scope.sample = "rer";
         scope.change = function (item) {
-            console.debug("sampleCtrl.change", item);
-        }
+            0;
+        };
         scope.onLookUp = function (item, $event) {
             scope.selectedSample = item;
-            console.debug("wc.onLookUp", $event)
-        }
-
-
+            0
+        };
         var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
         iterator.setEndCallbackOnly(true);
         iterator.next(function (value, index, proceed) {
-            console.debug("iterator-value", value);
-            console.debug("iterator-index", index);
+            0;
+            0;
             proceed();
         });
 
 
-    }])
-    .service("fluidClient", [function () {
-
-        this.getKeyVar = function (keyVar) {
-            if (!this.keyVars) {
-                this.keyVars = [];
-            }
-            if (this.keyVars[keyVar] != null) {
-                var keys = this.keyVars[keyVar];
-                keys++;
-                this.keyVars[keyVar] = keys;
-                return keyVar + "_" + keys;
-            } else {
-                this.keyVars[keyVar] = 0;
-                return keyVar;
-            }
-        };
-
-        return this;
-    }])
-    .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
-
-        var fluidIterator = function (values) {
-            var endOnly = false;
-            var q = $q.defer();
-            var array = values;
-            var length = array.length;
-            var index = 0;
-
-            function hasNext() {
-                return index < length;
-            }
-
-            function traverse(nextCallback) {
-                var value = undefined;
-                if (index < array.length) {
-                    value = array[index];
-                } else {
-                    index--;
-                }
-
-                nextCallback(value, index,
-                    function (timeout) {
-                        index++;
-                        if (hasNext()) {
-                            t(function () {
-                                traverse(nextCallback);
-                            }, timeout);
-                        } else {
-                            if (!endOnly) {
-                                index--;
-                                q.resolve({index: index, data: array[index]});
-                            } else {
-                                t(function () {
-                                    traverse(nextCallback);
-                                }, timeout);
-                            }
-                        }
-                    }, function (data) {
-                        q.resolve({index: index, data: data ? data : array[index]});
-                    });
-
-            }
-
-            function next(nextCallback) {
-                try {
-                    traverse(nextCallback);
-                } catch (err) {
-                    q.reject(err);
-                }
-                return q.promise;
-            }
-
-            function setEndCallbackOnly(end) {
-                endOnly = end;
-            }
-
-            return {
-                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
-            };
-        };
-
-        return fluidIterator;
-    }])
-    .factory("FluidAsyncIterator", ["$http", "$q", "$timeout", function ($h, $q, $t) {
-
-        var fluidAsycnIterator = function (url, method) {
-
-            var endOnly = false;
-            var q = $q.defer();
-            var length = 0;
-            var index = 0;
-            var method = method ? method : "GET";
-
-
-            function hasNext() {
-                return index < length;
-            }
-
-
-            function query() {
-                return $h({
-                    url: url, method: method, params: {index: index}
-                });
-            }
-
-            function traverse(nextCallback) {
-                var value = undefined;
-
-                query().success(function (data) {
-                    length = data.length;
-                    if (index < length) {
-                        value = data.value;
-                    } else {
-                        index--;
-                    }
-
-                    nextCallback(value, index,
-                        function (timeout) {
-                            index++;
-                            if (hasNext()) {
-                                $t(function () {
-                                    traverse(nextCallback);
-                                }, timeout);
-                            } else {
-                                if (!endOnly) {
-                                    index--;
-                                    q.resolve({index: index, data: value});
-                                } else {
-                                    $t(function () {
-                                        traverse(nextCallback);
-                                    }, timeout);
-                                }
-                            }
-                        }, function (data) {
-                            q.resolve({index: index, data: data ? data : value});
-                        });
-                });
-            }
-
-            function next(nextCallback) {
-                try {
-                    traverse(nextCallback);
-                } catch (err) {
-                    q.reject(err);
-                }
-                return q.promise;
-            }
-
-            function setEndCallbackOnly(end) {
-                endOnly = end;
-            }
-
-            return {
-                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
-            };
-
-        };
-
-
-        return fluidAsycnIterator;
     }])
     .factory("samples", function () {
 
