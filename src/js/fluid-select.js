@@ -32,8 +32,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     fieldLabel = attr.fieldLabel;
                 }
 
-                if (attr.fieldLabel) {
-                    fieldValue = attr.fieldLabel;
+                if (attr.fieldValue) {
+                    fieldValue = attr.fieldValue;
                 }
 
                 var dropDown = element.find("ul.dropdown-menu");
