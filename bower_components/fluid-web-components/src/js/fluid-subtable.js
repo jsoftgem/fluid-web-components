@@ -123,6 +123,8 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         var modal = getSubTableModal(attr.label);
                         if (bootstrapBrand) {
                             modal.$modal.attr(bootstrapBrand, "");
+                            element.find("button.toggle-columns").attr(bootstrapBrand, "");
+                            c(element.find("button.toggle-columns"))(scope);
                         }
                         setTable(element, keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
                         transclude.remove();
@@ -171,6 +173,12 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         column.sort = scope.$eval(attr.sort);
                     }
 
+                    if (attr.toggle) {
+                        column.toggle = attr.toggle === "true";
+                    } else {
+                        column.toggle = true;
+                    }
+
                     console.debug("fluidSubcolumn.element", element[0]);
                     column.row = element.find(".column-row").html();
                     var form = element.find(".column-form").html();
@@ -189,6 +197,8 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     var createButton = element.find("button.create");
     var eraseButton = element.find("button.delete");
+    var toggleColumnsButton = element.find("button.toggle-columns");
+    var toggleColumnsList = element.find("ul.toggle-columns");
     var sort = undefined;
     var fieldSorted = undefined;
     var modeloc = keyVar + "_oc";
@@ -412,9 +422,12 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     });
 
+    var columnToggles = 0;
+
     for (var i = 0; i < columns.length; i++) {
         var col = columns[i];
         var td = $("<td>");
+        td.attr("ng-if", "!" + keyVar + "_toggled_" + col.name);
         if (/<[a-z][\s\S]*>/i.test(col.row)) {
             $(col.row).appendTo(td);
         } else {
@@ -427,10 +440,48 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         $("<a href='#'>").appendTo(th);
         td.appendTo(tr);
-        $(col.form).appendTo(modal.body);
-        console.debug("subColumn.col.form", col.form);
-        console.debug("subColumn.createdTd", td);
 
+        $(col.form).appendTo(modal.body);
+
+        if (col.toggle === true) {
+            var tl = $("<li>").appendTo(toggleColumnsList)
+                .attr("column-index", i)
+                .attr("column-name", col.name)
+            var a = $("<a>").attr("href", "#")
+                .appendTo(tl).html(col.header);
+
+            $("<input>").attr("type", "checkbox")
+                .prop("checked", true)
+                .addClass("pull-right")
+                .appendTo(a).unbind("click");
+            columnToggles++;
+        }
+        console.debug("toggle-columns.col", col);
+
+
+    }
+
+    toggleColumnsList.delegate("li a input", "click", function (event) {
+        var li = $(this).parent().parent();
+        var checkbox = $(this);
+        var columnIndex = li.attr("column-index");
+        var columnName = li.attr("column-name");
+        var columnToggled = li.attr("column-toggled");
+        var toggled = !checkbox.prop("checked");
+        li.attr("column-toggled", toggled);
+        thead.find("th:eq(" + columnIndex + ")").toggleClass("hidden");
+        scope[keyVar + "_toggled_" + columnName + ""] = toggled;
+        timeout(function () {
+            scope.$apply();
+        });
+        console.debug("toggle-columns.columnToggled", columnToggled);
+        console.debug("toggle-columns.columnName", columnName);
+        console.debug("toggle-columns.columnIndex", columnIndex);
+
+    });
+
+    if (columnToggles === 0) {
+        toggleColumnsButton.remove();
     }
 
     tr.appendTo(table);
@@ -445,7 +496,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
 function getSubTableModal(label) {
 
-    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog'>");
+    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog' data-backdrop='false'>");
     var $dialog = $("<div class='modal-dialog'>").appendTo($modal);
     var $modalContent = $("<form class='modal-content' role='form'>").css("padding", 0).appendTo($dialog);
     var $modalHeader = $("<div class='modal-header'>").appendTo($modalContent);
