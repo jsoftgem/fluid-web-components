@@ -1,7 +1,7 @@
 /**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -44,13 +44,13 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.w
             scope.selectedSample = item;
             console.debug("wc.onLookUp", $event)
         };
-        var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
+      /*  var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
         iterator.setEndCallbackOnly(true);
         iterator.next(function (value, index, proceed) {
             console.debug("iterator-value", value);
             console.debug("iterator-index", index);
             proceed();
-        });
+        });*/
 
 
     }])

@@ -2,6 +2,9 @@
  * Created by jerico on 9/16/15.
  */
 function getValue(object, field) {
+    console.debug("setValue.getValue.field", field);
+    console.debug("setValue.getValue.object", object);
+
     if (field) {
         for (var item in object) {
             if (item === field) {
@@ -13,6 +16,7 @@ function getValue(object, field) {
     } else {
         this.value = object;
     }
+    console.debug("setValue.getValue.value", this.value);
     return this;
 }
 

@@ -32,8 +32,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     fieldLabel = attr.fieldLabel;
                 }
 
-                if (attr.fieldLabel) {
-                    fieldValue = attr.fieldLabel;
+                if (attr.fieldValue) {
+                    fieldValue = attr.fieldValue;
                 }
 
                 var dropDown = element.find("ul.dropdown-menu");
@@ -44,7 +44,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
 
                 var lookupButton = element.find("button.look");
 
-                lookupButton.click(function ($event) {
+                lookupButton.click(function () {
                     look();
                 });
 
@@ -59,6 +59,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     angular.forEach(items, function (item) {
                         var li = $("<li>").addClass("fluid-select-item");
                         var a = $("<a>").attr("href", "#").addClass("morris-hover-point").text(new getValue(item, fieldLabel).value).appendTo(li);
+                        a.unbind("click");
                         a.click(function ($event) {
                             console.debug("fluid-select.click", item);
                             var value = new getValue(item, fieldValue).value;
@@ -103,18 +104,20 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         if (!loaded) {
                             load().then(function (data) {
                                 var itemLabel = f("filter")(data, dataValue);
-                                var value = new getValue(itemLabel[0], fieldValue).value;
-                                label.text(value);
+                                var value = new getValue(itemLabel[0], fieldLabel).value;
+                                console.debug("setValue", value);
+                                label.html(value);
                             });
                         } else {
                             var itemLabel = f("filter")(sourceList, dataValue);
-                            var value = new getValue(itemLabel[0], fieldValue).value;
-                            label.text(value);
+                            var value = new getValue(itemLabel[0], fieldLabel).value;
+                            console.debug("setValue", value);
+                            label.html(value);
                         }
                     } else {
                         label.text("");
                     }
-                }
+                };
 
                 ngModel.$render = function () {
                     setValue(ngModel.$viewValue);

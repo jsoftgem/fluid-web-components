@@ -606,8 +606,8 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     fieldLabel = attr.fieldLabel;
                 }
 
-                if (attr.fieldLabel) {
-                    fieldValue = attr.fieldLabel;
+                if (attr.fieldValue) {
+                    fieldValue = attr.fieldValue;
                 }
 
                 var dropDown = element.find("ul.dropdown-menu");
@@ -618,7 +618,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
 
                 var lookupButton = element.find("button.look");
 
-                lookupButton.click(function ($event) {
+                lookupButton.click(function () {
                     look();
                 });
 
@@ -633,6 +633,7 @@ angular.module("fluid.webComponents.fluidSelect", [])
                     angular.forEach(items, function (item) {
                         var li = $("<li>").addClass("fluid-select-item");
                         var a = $("<a>").attr("href", "#").addClass("morris-hover-point").text(new getValue(item, fieldLabel).value).appendTo(li);
+                        a.unbind("click");
                         a.click(function ($event) {
                             0;
                             var value = new getValue(item, fieldValue).value;
@@ -677,18 +678,20 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         if (!loaded) {
                             load().then(function (data) {
                                 var itemLabel = f("filter")(data, dataValue);
-                                var value = new getValue(itemLabel[0], fieldValue).value;
-                                label.text(value);
+                                var value = new getValue(itemLabel[0], fieldLabel).value;
+                                0;
+                                label.html(value);
                             });
                         } else {
                             var itemLabel = f("filter")(sourceList, dataValue);
-                            var value = new getValue(itemLabel[0], fieldValue).value;
-                            label.text(value);
+                            var value = new getValue(itemLabel[0], fieldLabel).value;
+                            0;
+                            label.html(value);
                         }
                     } else {
                         label.text("");
                     }
-                }
+                };
 
                 ngModel.$render = function () {
                     setValue(ngModel.$viewValue);
@@ -1467,6 +1470,9 @@ angular.module("fluid.utils", [])
  * Created by jerico on 9/16/15.
  */
 function getValue(object, field) {
+    0;
+    0;
+
     if (field) {
         for (var item in object) {
             if (item === field) {
@@ -1478,6 +1484,7 @@ function getValue(object, field) {
     } else {
         this.value = object;
     }
+    0;
     return this;
 }
 
@@ -1621,7 +1628,7 @@ angular.module("fluid.webComponents.bootstrap", [])
     }]);;/**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
+angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -1664,13 +1671,13 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.w
             scope.selectedSample = item;
             0
         };
-        var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
+      /*  var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
         iterator.setEndCallbackOnly(true);
         iterator.next(function (value, index, proceed) {
-            0;
-            0;
+            console.debug("iterator-value", value);
+            console.debug("iterator-index", index);
             proceed();
-        });
+        });*/
 
 
     }])

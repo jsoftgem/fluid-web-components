@@ -13,7 +13,7 @@
     <div class="form-group">
         <!-- <fluid-select info class="pull-right" values="5,10,15,20"
                        label="Size" ng-model="taskSize"></fluid-select>-->
-        <fluid-pagination ng-model="taskList" limit="10" method="get"
+       <!-- <fluid-pagination ng-model="taskList" limit="10" method="get"
                           source-url="http://localhost:9080/rex-services/services/flow_task_query/sample_tasks">
             <fluid-subtable success key-var="task" label="Sample Tasks" show-clear="false"
                             ng-model="taskList" show-add="false">
@@ -49,28 +49,28 @@
                 </fluid-subcolumn>
 
             </fluid-subtable>
-        </fluid-pagination>
+        </fluid-pagination>-->
 
     </div>
 
-    <div class="form-group">
+   <!-- <div class="form-group">
         <fluid-pagination ng-model="taskList2" limit="1" method="get"
                           source-url="http://localhost:8080/rex-services/services/flow_task_query/sample_tasks">
             {{taskList2}}
         </fluid-pagination>
 
-    </div>
+    </div>-->
     <div class="form-group">
-        <fluid-select tag="fluid-select" info class="col-lg-12"
+    <!--    <fluid-select tag="fluid-select" info class="col-lg-12"
                       source-url="http://localhost:8080/rex-services/factories/war/table_factories/years"
-                      label="Years" ng-model="year"></fluid-select>
+                      label="Years" ng-model="year"></fluid-select>-->
     </div>
     <div class="form-group">
         <fluid-select tag="fluid-select" info class="col-lg-12"
-                      factory="samples" field-label="name" field-value="name"
+                      factory="samples" field-label="name"
                       label="Sample" ng-model="sample"></fluid-select>
     </div>
-    <div class="form-group">
+<!--    <div class="form-group">
         <a class="btn" primary fluid-lookup factory="samples" label="Samples" ng-model="selectedSample">
             <i class="fa fa-search"></i>
             <fluid-lookup-table key-var="sampleValue">
@@ -86,7 +86,7 @@
             </fluid-lookup-table>
         </a>
         {{selectedSample}}
-    </div>
+    </div>-->
 </div>
 <script id="subtable.template" type="text/ng-template">
     <div style="min-height: 100px;width:185px; word-wrap: break-word; font-size: 10px">
