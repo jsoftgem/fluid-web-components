@@ -677,12 +677,12 @@ angular.module("fluid.webComponents.fluidSelect", [])
                         if (!loaded) {
                             load().then(function (data) {
                                 var itemLabel = f("filter")(data, dataValue);
-                                var value = new getValue(itemLabel[0], fieldValue).value;
+                                var value = new getValue(itemLabel[0], fieldLabel).value;
                                 label.text(value);
                             });
                         } else {
                             var itemLabel = f("filter")(sourceList, dataValue);
-                            var value = new getValue(itemLabel[0], fieldValue).value;
+                            var value = new getValue(itemLabel[0], fieldLabel).value;
                             label.text(value);
                         }
                     } else {
