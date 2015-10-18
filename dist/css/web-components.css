@@ -48,6 +48,10 @@
   user-select: none;
 }
 
+.fluid-subtable button.toggle-columns {
+  content: '\25bc';
+}
+
 .fluid-subtable table {
   width: 100%;
 }
@@ -238,4 +242,8 @@ fluid-subtable[danger] table th.fluid-sort a {
 .fluid-lookup.modal[warning] .modal-header {
   color: white;
   background: #f0ad4e;
+}
+
+.fluid-sort:hover {
+  background: whitesmoke;
 }

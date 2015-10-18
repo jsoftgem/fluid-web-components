@@ -12,6 +12,10 @@
 
 }
 
+.fluid-subtable button.toggle-columns {
+  content: '\25bc';
+}
+
 .fluid-subtable table {
   width: $full-width;
 }

@@ -906,6 +906,8 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         var modal = getSubTableModal(attr.label);
                         if (bootstrapBrand) {
                             modal.$modal.attr(bootstrapBrand, "");
+                            element.find("button.toggle-columns").attr(bootstrapBrand, "");
+                            c(element.find("button.toggle-columns"))(scope);
                         }
                         setTable(element, keyVar, c, scope, modal, attr.ngModel, ngModel, t, columns, validate, f);
                         transclude.remove();
@@ -954,6 +956,12 @@ angular.module("fluid.webComponents.fluidSubTable", [])
                         column.sort = scope.$eval(attr.sort);
                     }
 
+                    if (attr.toggle) {
+                        column.toggle = attr.toggle === "true";
+                    } else {
+                        column.toggle = true;
+                    }
+
                     0;
                     column.row = element.find(".column-row").html();
                     var form = element.find(".column-form").html();
@@ -972,6 +980,8 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     var createButton = element.find("button.create");
     var eraseButton = element.find("button.delete");
+    var toggleColumnsButton = element.find("button.toggle-columns");
+    var toggleColumnsList = element.find("ul.toggle-columns");
     var sort = undefined;
     var fieldSorted = undefined;
     var modeloc = keyVar + "_oc";
@@ -1195,9 +1205,12 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
     });
 
+    var columnToggles = 0;
+
     for (var i = 0; i < columns.length; i++) {
         var col = columns[i];
         var td = $("<td>");
+        td.attr("ng-if", "!" + keyVar + "_toggled_" + col.name);
         if (/<[a-z][\s\S]*>/i.test(col.row)) {
             $(col.row).appendTo(td);
         } else {
@@ -1210,10 +1223,48 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
         }
         $("<a href='#'>").appendTo(th);
         td.appendTo(tr);
+
         $(col.form).appendTo(modal.body);
+
+        if (col.toggle === true) {
+            var tl = $("<li>").appendTo(toggleColumnsList)
+                .attr("column-index", i)
+                .attr("column-name", col.name)
+            var a = $("<a>").attr("href", "#")
+                .appendTo(tl).html(col.header);
+
+            $("<input>").attr("type", "checkbox")
+                .prop("checked", true)
+                .addClass("pull-right")
+                .appendTo(a).unbind("click");
+            columnToggles++;
+        }
+        0;
+
+
+    }
+
+    toggleColumnsList.delegate("li a input", "click", function (event) {
+        var li = $(this).parent().parent();
+        var checkbox = $(this);
+        var columnIndex = li.attr("column-index");
+        var columnName = li.attr("column-name");
+        var columnToggled = li.attr("column-toggled");
+        var toggled = !checkbox.prop("checked");
+        li.attr("column-toggled", toggled);
+        thead.find("th:eq(" + columnIndex + ")").toggleClass("hidden");
+        scope[keyVar + "_toggled_" + columnName + ""] = toggled;
+        timeout(function () {
+            scope.$apply();
+        });
+        0;
         0;
         0;
 
+    });
+
+    if (columnToggles === 0) {
+        toggleColumnsButton.remove();
     }
 
     tr.appendTo(table);
@@ -1228,7 +1279,7 @@ function setTable(element, keyVar, compile, scope, modal, value, ngModel, timeou
 
 function getSubTableModal(label) {
 
-    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog'>");
+    var $modal = $("<div class='modal fade fluid-subtable fluid-subtable-form' tabindex='-1' role='dialog' data-backdrop='false'>");
     var $dialog = $("<div class='modal-dialog'>").appendTo($modal);
     var $modalContent = $("<form class='modal-content' role='form'>").css("padding", 0).appendTo($dialog);
     var $modalHeader = $("<div class='modal-header'>").appendTo($modalContent);
@@ -1250,6 +1301,169 @@ function getSubTableModal(label) {
     }
 
 };/**
+ * Created by Jerico on 02/10/2015.
+ */
+angular.module("fluid.utils", [])
+    .factory("FluidIterator", ["$timeout", "$q", function (t, $q) {
+
+        var fluidIterator = function (values) {
+            var endOnly = false;
+            var q = $q.defer();
+            var array = values;
+            var length = array.length;
+            var index = 0;
+
+            function hasNext() {
+                return index < length;
+            }
+
+            function traverse(nextCallback) {
+                var value = undefined;
+                if (index < array.length) {
+                    value = array[index];
+                } else {
+                    index--;
+                }
+
+                nextCallback(value, index,
+                    function (timeout) {
+                        index++;
+                        if (hasNext()) {
+                            t(function () {
+                                traverse(nextCallback);
+                            }, timeout);
+                        } else {
+                            if (!endOnly) {
+                                index--;
+                                q.resolve({index: index, data: array[index]});
+                            } else {
+                                t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            }
+                        }
+                    }, function (data) {
+                        q.resolve({index: index, data: data ? data : array[index]});
+                    });
+
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
+
+            return {
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
+            };
+        };
+
+        return fluidIterator;
+    }])
+    .factory("FluidAsyncIterator", ["$http", "$q", "$timeout", function ($h, $q, $t) {
+        var fluidAsyncIterator = function (url, method) {
+
+            var endOnly = false;
+            var q = $q.defer();
+            var length = 0;
+            var index = 0;
+            var method = method ? method : "GET";
+
+
+            function hasNext() {
+                return index < length;
+            }
+
+
+            function query() {
+                return $h({
+                    url: url, method: method, params: {index: index}
+                });
+            }
+
+            function traverse(nextCallback) {
+                var value = undefined;
+
+                query().success(function (data) {
+                    length = data.length;
+                    if (index < length) {
+                        value = data.value;
+                    } else {
+                        index--;
+                    }
+
+                    nextCallback(value, index,
+                        function (timeout) {
+                            index++;
+                            if (hasNext()) {
+                                $t(function () {
+                                    traverse(nextCallback);
+                                }, timeout);
+                            } else {
+                                if (!endOnly) {
+                                    index--;
+                                    q.resolve({index: index, data: value});
+                                } else {
+                                    $t(function () {
+                                        traverse(nextCallback);
+                                    }, timeout);
+                                }
+                            }
+                        }, function (data) {
+                            q.resolve({index: index, data: data ? data : value});
+                        });
+                }).error(function (err) {
+                    q.reject(err);
+                });
+            }
+
+            function next(nextCallback) {
+                try {
+                    traverse(nextCallback);
+                } catch (err) {
+                    q.reject(err);
+                }
+                return q.promise;
+            }
+
+            function setEndCallbackOnly(end) {
+                endOnly = end;
+            }
+
+            return {
+                next: next, length: length, setEndCallbackOnly: setEndCallbackOnly
+            };
+
+        };
+        return fluidAsyncIterator;
+    }])
+    .service("fluidClient", [function () {
+
+        this.getKeyVar = function (keyVar) {
+            if (!this.keyVars) {
+                this.keyVars = [];
+            }
+            if (this.keyVars[keyVar] != null) {
+                var keys = this.keyVars[keyVar];
+                keys++;
+                this.keyVars[keyVar] = keys;
+                return keyVar + "_" + keys;
+            } else {
+                this.keyVars[keyVar] = 0;
+                return keyVar;
+            }
+        };
+
+        return this;
+    }]);/**
  * Created by jerico on 9/16/15.
  */
 function getValue(object, field) {
@@ -1407,7 +1621,8 @@ angular.module("fluid.webComponents.bootstrap", [])
     }]);;/**
  * Created by rickzx98 on 9/5/15.
  */
-angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "wcTemplates"])
+'use strict'
+angular.module("fluid.webComponents", ["angular.filter", "fluid.utils", "fluid.webComponents.fluidSubcomponent", "fluid.webComponents.bootstrap", "fluid.webComponents.fluidCache", "fluid.webComponents.fluidSelect", "fluid.webComponents.fluidSubTable", "fluid.webComponents.fluidLookup", "fluid.webComponents.fluidPagination", "fluid.webComponents.fluidCheck", "wcTemplates"])
     .directive("fluidDisabled", [function () {
         return {
             restrict: "A",
@@ -1439,25 +1654,73 @@ angular.module("fluid.webComponents", ["angular.filter", "fluid.webComponents.fl
             }
         }
     }])
-    .service("fluidClient", [function () {
-
-        this.getKeyVar = function (keyVar) {
-            if (!this.keyVars) {
-                this.keyVars = [];
-            }
-            if (this.keyVars[keyVar] != null) {
-                var keys = this.keyVars[keyVar];
-                keys++;
-                this.keyVars[keyVar] = keys;
-                return keyVar + "_" + keys;
-            } else {
-                this.keyVars[keyVar] = 0;
-                return keyVar;
-            }
+    .controller("sampleCtrl", ["$scope", "FluidAsyncIterator", function (scope, FluidAsyncIterator) {
+        scope.taskSize = 5;
+        scope.year = 1957;
+        scope.sample = "rer";
+        scope.change = function (item) {
+            0;
         };
+        scope.onLookUp = function (item, $event) {
+            scope.selectedSample = item;
+            0
+        };
+        var iterator = new FluidAsyncIterator("http://localhost:9080/rex-services/services/flow_task_query/sample_tasks");
+        iterator.setEndCallbackOnly(true);
+        iterator.next(function (value, index, proceed) {
+            0;
+            0;
+            proceed();
+        });
 
-        return this;
-    }]);;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
+
+    }])
+    .factory("samples", function () {
+
+        return [{
+            "name": "Jerico",
+            year: 1991,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }, {
+            "name": "Pogi",
+            year: 1991,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }, {
+            "name": "John Doe",
+            year: 1978,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }, {
+            "name": "James Hitler",
+            year: 1998,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }, {
+            "name": "Anita",
+            year: 1998,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }, {
+            "name": "Calcium Kid",
+            year: 1998,
+            list: [{"name": "Someone Else", "year": "1976"}, {
+                "name": "Someone Else",
+                "year": "1976"
+            }, {"name": "Someone Else", "year": "1976"}]
+        }];
+    });;angular.module('wcTemplates', ['templates/fluid-select.html', 'templates/fluid-subtable.html']);
 
 angular.module("templates/fluid-select.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-select.html",
@@ -1466,5 +1729,5 @@ angular.module("templates/fluid-select.html", []).run(["$templateCache", functio
 
 angular.module("templates/fluid-subtable.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/fluid-subtable.html",
-    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><div class=\"panel-title fluid-table-panel-title\"><span><b class=\"fst-label\"></b></span> <span class=\"pull-right\"><button type=\"button\" class=\"btn btn-lg btn-info create\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger delete\"><i class=\"fa fa-eraser\"></i></button> <button fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\"><i class=\"fa fa-search\"></i></button></span></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead></thead><tbody></tbody></table></div></div>");
+    "<div class=\"fluid-subtable\"><ng-transclude></ng-transclude><div class=\"panel\"><div class=\"panel-heading\"><div class=\"panel-title fluid-table-panel-title center-block\"><span class=\"hidden-xs hidden-sm\"><b class=\"fst-label\"></b></span> <span class=\"pull-right btn-group btn-group-lg\" role=\"group\"><button type=\"button\" class=\"btn btn-lg btn-info create\"><i class=\"fa fa-plus\"></i></button> <button type=\"button\" class=\"btn btn-lg btn-danger delete\"><i class=\"fa fa-eraser\"></i></button> <button fluid-lookup type=\"button\" class=\"btn btn-lg btn-warning\"><i class=\"fa fa-search\"></i></button><div class=\"btn-group btn-group-lg\" role=\"group\"><button class=\"btn toggle-columns\" title=\"Toggle columns\" data-toggle=\"dropdown\"><i class=\"fa fa-th-list\"></i> <span class=\"caret\"></span></button><ul class=\"dropdown-menu dropdown-menu-right toggle-columns\"></ul></div></span></div></div><table class=\"panel-body table table-striped table-condensed table-hover\"><thead></thead><tbody></tbody></table></div></div>");
 }]);

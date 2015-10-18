@@ -2,12 +2,12 @@
     <ng-transclude></ng-transclude>
     <div class="panel">
         <div class="panel-heading">
-            <div class="panel-title fluid-table-panel-title">
-                <span>
+            <div class="panel-title fluid-table-panel-title center-block">
+                <span class="hidden-xs hidden-sm">
                     <b class="fst-label"></b>
                 </span>
 
-                <span class="pull-right">
+                <span class="pull-right btn-group btn-group-lg" role="group">
 
                     <button type="button" class="btn btn-lg btn-info create"><i
                             class="fa fa-plus"></i>
@@ -21,10 +21,17 @@
                             class="btn btn-lg btn-warning"><i
                             class="fa fa-search"></i>
                     </button>
-
+                     <div class="btn-group btn-group-lg" role="group">
+                         <button class="btn toggle-columns" title="Toggle columns" data-toggle="dropdown">
+                             <i class="fa fa-th-list"></i>
+                             <span class="caret"></span>
+                         </button>
+                         <ul class="dropdown-menu dropdown-menu-right toggle-columns">
+                         </ul>
+                     </div>
                 </span>
-            </div>
 
+            </div>
         </div>
         <table class="panel-body table table-striped table-condensed table-hover">
             <thead>
